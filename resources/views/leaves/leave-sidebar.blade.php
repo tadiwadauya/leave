@@ -5,7 +5,7 @@
  * Date: 1/30/2020
  * Time: 7:45 AM
  */
-
+$user = Auth::user();
 $paynumber = AUth::user()->paynumber;
 
 $specialCount = \App\Models\Leave::where('type_of_leave','=','Compassionate')->where('paynumber','=',$paynumber)->where('status','=',1)->whereYear('created_at', '=', date('Y'))->sum('days_taken');
@@ -14,7 +14,11 @@ $specialCount = \App\Models\Leave::where('type_of_leave','=','Compassionate')->w
 $sickCount = \App\Models\Leave::where('type_of_leave','=','Sick')->where('paynumber','=',$paynumber)->where('status','=',1)->whereYear('created_at', '=', date('Y'))->sum('days_taken');
 //$sickCount = \App\Models\Leave::where('type_of_leave','=','Sick')->where('status','=',1)->whereYear('created_at', '=', date('Y'))->count();
 //dd($sickCount);
-$maternityCount = \App\Models\Leave::where('type_of_leave','=','Maternity')->where('paynumber','=',$paynumber)->where('status','=',1)->count();
+$maternityCount = \App\Models\Leave::where('type_of_leave','=','Maternity')
+    ->where('paynumber','=',$paynumber)
+    ->where('status','=',1)
+    ->whereYear('created_at', date('Y'))
+    ->sum('days_taken');
 ?>
 
 <div class="card">
@@ -39,8 +43,9 @@ $maternityCount = \App\Models\Leave::where('type_of_leave','=','Maternity')->whe
             <br/>
             Sick days taken: {{$sickCount}} / 180
             <br/>
-            Maternity days taken: {{$maternityCount}} / 3
-
+            @if ($user->gender == 'Female')
+                Maternity days taken: {{$maternityCount}} / 98
+            @endif
         </ul>
     </div>
 
