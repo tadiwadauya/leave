@@ -89,7 +89,7 @@
                                     </div>
                                     <div class="form-group has-feedback row {{ $errors->has('sample') ? ' has-error ' : '' }}">
                                         <div class="form-group col-lg-6">
-                                            <label for="type_of_leave">sick note</label>
+                                            <label for="type_of_leave">Sick note</label>
                                             <div class="input-group"> 
                                                 <input type="file" name="file"  >
                                                 <div class="input-group-append">
@@ -104,7 +104,7 @@
 
                                     <div class="form-group has-feedback row {{ $errors->has('sample') ? ' has-error ' : '' }}">
                                         <div class="form-group col-lg-6">
-                                            <label for="type_of_leave">confirmation of exams or timetable</label>
+                                            <label for="type_of_leave">Confirmation of exams or timetable</label>
                                             <div class="input-group"> 
                                                 <input type="file" name="file"  >
                                                 <div class="input-group-append">
