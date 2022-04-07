@@ -1015,6 +1015,24 @@ class LeaveController extends Controller
 
         return View('leaves.sick-leave-balances', compact('users'));
     }
+
+    public function getMaternityLeaveBalances() {
+        $users = User::all();
+
+        return View('leaves.maternity-leave-balances', compact('users'));
+    }
+
+    public function getStudyLeaveBalances() {
+        $users = User::all();
+
+        return View('leaves.study-leave-balances', compact('users'));
+    }
+
+    public function getCompasionateLeaveBalances() {
+        $users = User::all();
+
+        return View('leaves.compasionate-leave-balances', compact('users'));
+    }
     // Leave Balances
 
     public function getRecords() {

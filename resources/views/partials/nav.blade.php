@@ -119,6 +119,35 @@
 
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Leave Balances
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item {{ (Request::is('anual-leave-balances') || Request::is('anual-leave-balances')) ? 'active' : null }}"  href="{{ route('leave.balances.anual') }}">
+                            Annual Balances
+                        </a>
+
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item {{ (Request::is('sick-leave-balances') || Request::is('sick-leave-balances')) ? 'active' : null }}" href="{{ route('leave.balances.sick') }}">
+                            Sick Balances
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item {{ (Request::is('martenity-leave-balances') || Request::is('martenity-leave-balances')) ? 'active' : null }}" href="{{ route('leave.balances.martenity') }}">
+                            Maternity Balances
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item {{ (Request::is('study-leave-balances') || Request::is('study-leave-balances')) ? 'active' : null }}" href="{{ route('leave.balances.study') }}">
+                            Study Balances
+                        </a>
+                        {{-- <div class="dropdown-divider"></div>
+                        <a class="dropdown-item {{ (Request::is('leave-balances') || Request::is('leave-balances')) ? 'active' : null }}" href="{{ route('leave.balances') }}">
+                            Compasionate Balances
+                        </a> --}}
+                        
+                    </div>
+                </li>
+
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Settings
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
