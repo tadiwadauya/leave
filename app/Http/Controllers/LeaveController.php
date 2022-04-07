@@ -93,7 +93,6 @@ class LeaveController extends Controller
             $leaves = Leave::where('status', null)
                 ->join('users', 'users.paynumber', '=', 'leaves.paynumber')
                 ->select('users.first_name','users.last_name','leaves.id','leaves.paynumber','leaves.type_of_leave','leaves.days_taken','leaves.date_from','leaves.date_to','leaves.created_at','leaves.status')
-                // ->sortBy('created_at', 'DESC')
                 ->get();
         }elseif($directorCheck){
 //DIRECTOR
@@ -103,7 +102,6 @@ class LeaveController extends Controller
                 ->select('users.first_name','users.last_name','leaves.id','leaves.paynumber','leaves.type_of_leave','leaves.days_taken','leaves.date_from','leaves.date_to','leaves.created_at','leaves.status')
                 ->where('role_user.role_id',4)
                 ->orWhere('role_user.role_id',5)
-                // ->sortBy('created_at', 'DESC')
                 ->get();
         } elseif($managerCheck) {
             $dept = Auth::user()->department;
@@ -122,7 +120,6 @@ class LeaveController extends Controller
                     ->join('role_user', 'users.id', '=', 'role_user.user_id')
                     ->select('users.first_name','users.last_name','leaves.id','leaves.paynumber','leaves.type_of_leave','leaves.days_taken','leaves.date_from','leaves.date_to','leaves.created_at','leaves.status')
                     ->where('role_user.role_id','=','4')
-                    // ->sortBy('created_at', 'DESC')
                     ->get();
             }
             elseif ($position == 'Technical Director') {
@@ -132,7 +129,6 @@ class LeaveController extends Controller
                     ->join('role_user', 'users.id', '=', 'role_user.user_id')
                     ->select('users.first_name','users.last_name','leaves.id','leaves.paynumber','leaves.type_of_leave','leaves.days_taken','leaves.date_from','leaves.date_to','leaves.created_at','leaves.status')
                     ->where('role_user.role_id','=','4')
-                    // ->sortBy('created_at', 'DESC')
                     ->get();
             }
             elseif ($position == 'Operations Manager') {
@@ -145,7 +141,6 @@ class LeaveController extends Controller
                     ->orWhere('leaves.department', $dept)
                     ->where('role_user.role_id','!=','4')
                     ->where('status', null)
-                    // ->sortBy('created_at', 'DESC')
                     ->get();
             }
             elseif ($position == 'Engineering Manager') {
@@ -158,7 +153,6 @@ class LeaveController extends Controller
                     ->orWhere('leaves.department', $dept)
                     ->where('role_user.role_id','!=','4')
                     ->where('status', null)
-                    // ->sortBy('created_at', 'DESC')
                     ->get();
             }
             elseif ($position == 'Finance Manager') {
@@ -171,7 +165,6 @@ class LeaveController extends Controller
                     ->orWhere('leaves.department', $dept)
                     ->where('role_user.role_id','!=','4')
                     ->where('status', null)
-                    // ->sortBy('created_at', 'DESC')
                     ->get();
 
             }
@@ -182,7 +175,6 @@ class LeaveController extends Controller
                     ->join('role_user', 'users.id', '=', 'role_user.user_id')
                     ->select('users.first_name','users.last_name','leaves.id','leaves.paynumber','leaves.type_of_leave','leaves.days_taken','leaves.date_from','leaves.date_to','leaves.created_at','leaves.status')
                     ->where('role_user.role_id','=','5')
-                    // ->sortBy('created_at', 'DESC')
                     ->get();
             }
             else{
@@ -194,7 +186,6 @@ class LeaveController extends Controller
                     ->select('users.first_name','users.last_name','leaves.id','leaves.paynumber','leaves.type_of_leave','leaves.days_taken','leaves.date_from','leaves.date_to','leaves.created_at','leaves.status')
                     ->where('role_user.role_id','!=','4')
                     ->where('role_user.role_id','!=','5')
-                    // ->sortBy('created_at', 'DESC')
                     ->get();
             }
 
@@ -274,12 +265,12 @@ class LeaveController extends Controller
             ->whereYear('created_at', '=', date('Y'))
             ->sum('days_taken');
 
-        // $maternityCount = \App\Models\Leave::where('type_of_leave','=','Maternity')
-        //     ->where('paynumber','=',$paynumber)
-        //     ->where('status','=',1)
-        //     // ->whereYear('created_at', '=', date('Y'))
-        //     // ->sum('day_taken');
-        //     ->count();
+        $studycount = \App\Models\Leave::where('type_of_leave','=','Study')
+            ->where('paynumber','=',$paynumber)
+            ->where('status','=',1)
+            ->whereYear('created_at', date('Y'))
+            ->sum('days_taken');
+            
         if ($user->gender == 'Female') {
             $maternityCount = \App\Models\Leave::where('type_of_leave','=','Maternity')
                 ->where('paynumber','=',$paynumber)
@@ -422,7 +413,7 @@ class LeaveController extends Controller
             if ($days_taken > (12 - $specialCount)){
                 return redirect('/leaves/create')->with('error', 'According to the law, you are only allowed 12 Special Leave days in a calendar year.');
             } else{
-                if($user->leave_days >= 1 || $user->leave_days >= $days_taken){
+                if($user->leave_days >= 1 && $user->leave_days >= $days_taken){
                     $leave = Leave::create([
                         'paynumber' => $request->input('paynumber'),
                         'type_of_leave' => $request->input('type_of_leave'),
@@ -437,7 +428,7 @@ class LeaveController extends Controller
                     ]);
                     $leave->save();
                 }else{
-                    return redirect('/leaves')->with('error', 'You have Exceeded The Number Of Days You Can Apply');
+                    return redirect('/leaves/create')->with('error', 'You have Exceeded The Number Of Days You Can Apply');
                 }
 
                 try {
@@ -466,88 +457,68 @@ class LeaveController extends Controller
                 }
             }
         } elseif ($request->type_of_leave == 'Sick'){
-            if ($days_taken > (180 - $sickCount)){
-                return redirect('/leaves/create')->with('error', 'According to the law, you are only allowed 180 Sick Leave days in a calendar year.');
-            } else {
-
-                if($user->sick_days >= 0.5 || $user->sick_days >= $days_taken){
-                    $leave = Leave::create([
-                        'paynumber' => $request->input('paynumber'),
-                        'type_of_leave' => $request->input('type_of_leave'),
-                        'days_taken' => $days_taken,
-                        'date_from' => $request->date_from,
-                        'date_to' => $request->date_to,
-                        'applied_by' => $request->input('applied_by'),
-                        'applier_name' => $request->input('applier_name'),
-                        'department' => $request->input('department'),
-                        'address' => $request->input('address'),
-                        'mobile' => $request->input('mobile'),
-                    ]);
-                    $leave->save();
-                }else{
-                    return redirect('/leaves')->with('error', 'You have Exceeded The Number Of Days You Can Apply');
-                }
-                // $leave = Leave::create([
-                //     'paynumber' => $request->input('paynumber'),
-                //     'type_of_leave' => $request->input('type_of_leave'),
-                //     'days_taken' => $days_taken,
-                //     'date_from' => $request->date_from,
-                //     'date_to' => $request->date_to,
-                //     'applied_by' => $request->input('applied_by'),
-                //     'applier_name' => $request->input('applier_name'),
-                //     'department' => $request->input('department'),
-                //     'address' => $request->input('address'),
-                //     'mobile' => $request->input('mobile'),
-                // ]);
-                // $leave->save();
             
-                try {
-                    foreach ($approvers as $authorizer){
-                        $applicant = User::where('paynumber','=',$request->paynumber)->first(); //Systems Applications Administrator Finance Manager
+            if($user->sick_days >= 0.5 && $user->sick_days >= $days_taken){
+                $leave = Leave::create([
+                    'paynumber' => $request->input('paynumber'),
+                    'type_of_leave' => $request->input('type_of_leave'),
+                    'days_taken' => $days_taken,
+                    'date_from' => $request->date_from,
+                    'date_to' => $request->date_to,
+                    'applied_by' => $request->input('applied_by'),
+                    'applier_name' => $request->input('applier_name'),
+                    'department' => $request->input('department'),
+                    'address' => $request->input('address'),
+                    'mobile' => $request->input('mobile'),
+                ]);
+                $leave->save();
+            }else{
+                return redirect('/leaves/create')->with('error', 'You have Exceeded The Number Of Days You Can Apply');
+            }
+            // $leave = Leave::create([
+            //     'paynumber' => $request->input('paynumber'),
+            //     'type_of_leave' => $request->input('type_of_leave'),
+            //     'days_taken' => $days_taken,
+            //     'date_from' => $request->date_from,
+            //     'date_to' => $request->date_to,
+            //     'applied_by' => $request->input('applied_by'),
+            //     'applier_name' => $request->input('applier_name'),
+            //     'department' => $request->input('department'),
+            //     'address' => $request->input('address'),
+            //     'mobile' => $request->input('mobile'),
+            // ]);
+            // $leave->save();
+        
+            try {
+                foreach ($approvers as $authorizer){
+                    $applicant = User::where('paynumber','=',$request->paynumber)->first(); //Systems Applications Administrator Finance Manager
 
-                        $details = [
-                            'greeting' => 'Good day, ' . $authorizer->first_name,
-                            'body' => $applicant->first_name . ' ' . $applicant->last_name . ' has submitted a leave request which needs your approval. The leave request has the following information: ',
-                            'body1'=> $leave->type_of_leave,
-                            'body2' => $leave->days_taken,
-                            'body3' => $leave->date_from,
-                            'body4' => $leave->date_to,
-                            'body5' => 'You can approve this request by clicking Approve : ',
-                            'approveURL' => 'http://leave.whelson.net.za/leaves/emailapprove/'.$authorizer->paynumber.'/'.$authorizer->first_name.'/'.$authorizer->last_name.'/'.$leave->id,
-                            'rejectURL' => 'http://leave.whelson.net.za/leaves/emailreject/'.$authorizer->paynumber.'/'.$authorizer->first_name.'/'.$authorizer->last_name.'/'.$leave->id,
-                            'body6'=> 'You can reject this request straightaway:',
-                            'id' => $leave->id
-                        ];
+                    $details = [
+                        'greeting' => 'Good day, ' . $authorizer->first_name,
+                        'body' => $applicant->first_name . ' ' . $applicant->last_name . ' has submitted a leave request which needs your approval. The leave request has the following information: ',
+                        'body1'=> $leave->type_of_leave,
+                        'body2' => $leave->days_taken,
+                        'body3' => $leave->date_from,
+                        'body4' => $leave->date_to,
+                        'body5' => 'You can approve this request by clicking Approve : ',
+                        'approveURL' => 'http://leave.whelson.net.za/leaves/emailapprove/'.$authorizer->paynumber.'/'.$authorizer->first_name.'/'.$authorizer->last_name.'/'.$leave->id,
+                        'rejectURL' => 'http://leave.whelson.net.za/leaves/emailreject/'.$authorizer->paynumber.'/'.$authorizer->first_name.'/'.$authorizer->last_name.'/'.$leave->id,
+                        'body6'=> 'You can reject this request straightaway:',
+                        'id' => $leave->id
+                    ];
 
-                        Mail::to($authorizer->email)->send(new LeaveApproval($details));
-                    }
-
-                } catch (\Exception $exception){
-                    echo 'Error - '.$exception;
+                    Mail::to($authorizer->email)->send(new LeaveApproval($details));
                 }
+
+            } catch (\Exception $exception){
+                echo 'Error - '.$exception;
             }
         }elseif ($request->type_of_leave == 'Maternity'){
             if (Auth::user()->gender == "Male"){
                 return redirect('/leaves/create')->with('error', 'Male Employees Are Not Allowed To Take Maternity Leaves.');
             } else {
-                // if ($days_taken <= (98 - $maternityCount)) {
-                //     $leave = Leave::create([
-                //         'paynumber' => $request->input('paynumber'),
-                //         'type_of_leave' => $request->input('type_of_leave'),
-                //         'days_taken' => $days_taken,
-                //         'date_from' => $request->date_from,
-                //         'date_to' => $request->date_to,
-                //         'applied_by' => $request->input('applied_by'),
-                //         'applier_name' => $request->input('applier_name'),
-                //         'department' => $request->input('department'),
-                //         'address' => $request->input('address'),
-                //         'mobile' => $request->input('mobile'),
-                //     ]);
-                //     $leave->save();
-                // } else {
-                //     return redirect('/leaves/create')->with('error', 'You can only apply for more than the prescribed limit');
-                // }
-                if ($user->maternity >= 0.5 || $user->maternity >= $days_taken) {
+                
+                if ($user->maternity >= 0.5 && $user->maternity >= $days_taken) {
                     $leave = Leave::create([
                         'paynumber' => $request->input('paynumber'),
                         'type_of_leave' => $request->input('type_of_leave'),
@@ -562,7 +533,7 @@ class LeaveController extends Controller
                     ]);
                     $leave->save();
                 } else {
-                    return redirect('/leaves')->with('error', 'You have Exceeded The Number Of Days You Can Apply');
+                    return redirect('/leaves/create')->with('error', 'You have Exceeded The Number Of Days You Can Apply');
                 }
 
                 try {
@@ -590,8 +561,52 @@ class LeaveController extends Controller
                         echo 'Error - '.$exception;
                     }
             }
+        }elseif ($request->type_of_leave == 'Study'){
+            
+            if ($user->study_leave_days >= 0.5 && $user->study_leave_days >= $days_taken) {
+                $leave = Leave::create([
+                    'paynumber' => $request->input('paynumber'),
+                    'type_of_leave' => $request->input('type_of_leave'),
+                    'days_taken' => $days_taken,
+                    'date_from' => $request->date_from,
+                    'date_to' => $request->date_to,
+                    'applied_by' => $request->input('applied_by'),
+                    'applier_name' => $request->input('applier_name'),
+                    'department' => $request->input('department'),
+                    'address' => $request->input('address'),
+                    'mobile' => $request->input('mobile'),
+                ]);
+                $leave->save();
+            } else {
+                return redirect('/leaves/create')->with('error', 'You have Exceeded The Number Of Days You Can Apply');
+            }
+
+            try {
+                foreach ($approvers as $authorizer){
+                    $applicant = User::where('paynumber','=',$request->paynumber)->first(); //Systems Applications Administrator Finance Manager
+
+                    $details = [
+                        'greeting' => 'Good day, ' . $authorizer->first_name,
+                        'body' => $applicant->first_name . ' ' . $applicant->last_name . ' has submitted a leave request which needs your approval. The leave request has the following information: ',
+                        'body1'=> $leave->type_of_leave,
+                        'body2' => $leave->days_taken,
+                        'body3' => $leave->date_from,
+                        'body4' => $leave->date_to,
+                        'body5' => 'You can approve this request by clicking Approve : ',
+                        'approveURL' => 'http://leave.whelson.net.za/leaves/emailapprove/'.$authorizer->paynumber.'/'.$authorizer->first_name.'/'.$authorizer->last_name.'/'.$leave->id,
+                        'rejectURL' => 'http://leave.whelson.net.za/leaves/emailreject/'.$authorizer->paynumber.'/'.$authorizer->first_name.'/'.$authorizer->last_name.'/'.$leave->id,
+                        'body6'=> 'You can reject this request straightaway:',
+                        'id' => $leave->id
+                    ];
+
+                    Mail::to($authorizer->email)->send(new LeaveApproval($details));
+                }
+
+            } catch (\Exception $exception){
+                echo 'Error - '.$exception;
+            }
         } else {
-            if($user->leave_days >= 0.5 || $user->leave_days >= $days_taken){
+            if($user->leave_days >= 0.5 && $user->leave_days >= $days_taken){
                 $leave = Leave::create([
                     'paynumber' => $request->input('paynumber'),
                     'type_of_leave' => $request->input('type_of_leave'),
@@ -607,7 +622,7 @@ class LeaveController extends Controller
 
                 $leave->save();
             }else{
-                return redirect('/leaves')->with('error', 'You have Exceeded The Number Of Days You Can Apply');
+                return redirect('/leaves/create')->with('error', 'You have Exceeded The Number Of Days You Can Apply');
             }
 
             try {
@@ -713,6 +728,15 @@ class LeaveController extends Controller
                     ->update([
                         'maternity' => $maternitydaysleft,
                     ]);
+            }elseif($leave->type_of_leave == 'Study') {
+                $studydaystaken = $leave->days_taken;
+                $studydaysleft = $user->study_leave_days - $studydaystaken;
+
+                DB::table('users')
+                    ->where('paynumber', $leave->paynumber)
+                    ->update([
+                        'study_leave_days' => $studydaysleft,
+                    ]);
             }
 
             if (!in_array($user->paynumber,$unidentified))
@@ -786,6 +810,15 @@ class LeaveController extends Controller
                 ->where('paynumber', $leave->paynumber)
                 ->update([
                     'maternity' => $maternitydaysleft,
+                ]);
+        }elseif($leave->type_of_leave == 'Study') {
+            $studydaystaken = $leave->days_taken;
+            $studydaysleft = $user->study_leave_days - $studydaystaken;
+
+            DB::table('users')
+                ->where('paynumber', $leave->paynumber)
+                ->update([
+                    'study_leave_days' => $studydaysleft,
                 ]);
         }
 

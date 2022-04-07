@@ -19,6 +19,12 @@ $maternityCount = \App\Models\Leave::where('type_of_leave','=','Maternity')
     ->where('status','=',1)
     ->whereYear('created_at', date('Y'))
     ->sum('days_taken');
+
+$studyCount = \App\Models\Leave::where('type_of_leave','=','Study')
+    ->where('paynumber','=',$paynumber)
+    ->where('status','=',1)
+    ->whereYear('created_at', date('Y'))
+    ->sum('days_taken');
 ?>
 
 <div class="card">
@@ -40,9 +46,17 @@ $maternityCount = \App\Models\Leave::where('type_of_leave','=','Maternity')
         <ul class="list-group">
 
             Special/ Compassionate days taken: {{$specialCount}} / 12
+
             <br/>
+
             Sick days taken: {{$sickCount}} / 180
+
             <br/>
+
+            Study: {{$studyCount}} / 21
+
+            <br/>
+            
             @if ($user->gender == 'Female')
                 Maternity days taken: {{$maternityCount}} / 98
             @endif
