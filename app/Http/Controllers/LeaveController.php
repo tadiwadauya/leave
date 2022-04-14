@@ -78,6 +78,16 @@ class LeaveController extends Controller
         return View('leaves.leaves', compact('leaves'));
     }
 
+  
+    public function showMysicknote($id)
+    {
+        $leave = Leave::findOrFail($id);
+        return view('leaves.show-my-sicknote', compact('leave'));
+    }
+
+    public function download($file){
+        return response()->download('documents/'.$file);
+    }
     public function manage(){
 
         $user = Auth::user();
@@ -311,6 +321,7 @@ class LeaveController extends Controller
             'date_from' => 'required',
             'date_to' => 'required',
             'applied_by' => 'required',
+            'file' => 'required',
         ]);
 
         $data = DB::table("users")->where('paynumber', '=', $request->paynumber)->first();
@@ -433,18 +444,39 @@ class LeaveController extends Controller
             if ($days_taken > (180 - $sickCount)){
                 return redirect('/leaves/create')->with('error', 'According to the law, you are only allowed 180 Sick Leave days in a calendar year.');
             } else {
-                $leave = Leave::create([
-                    'paynumber' => $request->input('paynumber'),
-                    'type_of_leave' => $request->input('type_of_leave'),
-                    'days_taken' => $days_taken,
-                    'date_from' => $request->date_from,
-                    'date_to' => $request->date_to,
-                    'applied_by' => $request->input('applied_by'),
-                    'applier_name' => $request->input('applier_name'),
-                    'department' => $request->input('department'),
-                    'address' => $request->input('address'),
-                    'mobile' => $request->input('mobile'),
-                ]);
+                
+                $leave=new Leave();
+                if($request->file('file')){
+                    $file=$request->file('file');
+                    $filename=time().'.'.$file->getClientOriginalExtension();
+                    $request->file->move('documents/', $filename);
+                } 
+                    
+                    $leave = Leave::create([
+                        'paynumber' => $request->input('paynumber'),
+                        'type_of_leave' => $request->input('type_of_leave'),
+                        'days_taken' => $days_taken,
+                        'date_from' => $request->date_from,
+                        'date_to' => $request->date_to,
+                        'applied_by' => $request->input('applied_by'),
+                        'applier_name' => $request->input('applier_name'),
+                        'department' => $request->input('department'),
+                        'address' => $request->input('address'),
+                        'mobile' => $request->input('mobile'),
+                        
+                    ]);
+                    $leave->file = $filename;
+                    // $leave->paynumber=$request->paynumber;
+                    // $leave->type_of_leave=$request->type_of_leave;
+                    // $leave->days_taken=$request->days_taken;
+                    // $leave->date_from=$request->date_from;
+                    // $leave->date_to=$request->date_to;
+                    // $leave->applied_by=$request->applied_by;
+                    // $leave->applier_name=$request->applier_name;
+                    // $leave->department=$request->department;
+                    // $leave->address=$request->address;
+                    // $leave->mobile=$request->mobile;
+                
                 $leave->save();
 
                 try {

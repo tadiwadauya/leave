@@ -1,8 +1,8 @@
 <?php
 /**
  * Created by PhpStorm.
- * User: Vincent Guyo
- * Date: 9/22/2019
+ * User: Tadiwa Dauya
+ * Date: 9/04/2022
  * Time: 13:28
  */
 ?>
@@ -79,6 +79,7 @@
                                     <th>Date To</th>
                                     <th>Applied On</th>
                                     <th>Status</th>
+                                    <th>Note</th>
                                     <th class="no-search no-sort">{!! trans('usersmanagement.users-table.actions') !!}</th>
                                     @role('admin')<th class="no-search no-sort"></th>@endrole
                                 </tr>
@@ -103,6 +104,16 @@
                                                 @php $badgeClass = 'warning'; echo 'Pending';@endphp
                                             @endif
                                             <span class="badge badge-{{$badgeClass}}"></span>
+                                        </td>
+                                        <td>
+                                            
+                                               @if ($leave->type_of_leave == 'Sick')    <a class="btn btn-sm btn-success btn-block" href="{{ URL::to('leavesick/' . $leave->id) }}">
+                                                <i class="fa fa-eye fa-fw" aria-hidden="true"></i> <span class="hidden-xs hidden-sm">Show</span><span class="hidden-xs hidden-sm hidden-md"> Sicknote</span>
+                                            </a>
+                                               @elseif ($leave->type_of_leave == 'Study') N/A
+                                                @endif 
+                                       
+                                        
                                         </td>
                                         @role('admin')
                                         <td>
