@@ -70,27 +70,28 @@ $userInfo = \App\Models\User::where('paynumber', $leave->paynumber )->first();
 
 <table border="1" width="100%" style="font-family: Arial; border-collapse: collapse; font-size: 10pt;" cellpadding="5">
     <tr>
-        <td style="width: 23%;">DATE &nbsp;&nbsp;<strong>{{' '.date('M j Y', strtotime($leave->created_at))}}</strong></td>
-        <td style="width: 60%;">DEPARTMENT &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>{{' '.$leave->department}}</strong></td>
-        <td style="width: 17%;">PAY NO</td>
+        <td style="width: 24%;">PAY NO</td>
+        <td style="width: 24%;"><strong>{{$leave->paynumber}}</strong></td>
+        <td style="width: 1%"></td>
+        <td style="width: 24%;">DATE &nbsp;&nbsp;</td>
+        <td style="width: 24%;"><strong>{{' '.date('M j Y', strtotime($leave->created_at))}}</strong></td>
+        
     </tr>
 
     <tr>
-        <td>NAME</td>
-        <td style="text-align: center;"><strong>{{$userInfo->first_name.' '.$userInfo->last_name}}</strong></td>
-        <td style="text-align: center;"><strong>{{$leave->paynumber}}</strong></td>
+        <td style="width: 24%;">NAME</td>
+        <td style="width: 24%;"><strong>{{$userInfo->first_name.' '.$userInfo->last_name}}</strong></td>
+        <td style="width: 1%"></td>
+        <td style="width: 24%;">DEPARTMENT</td>
+        <td style="width: 24%;"><strong>{{' '.$leave->department}}</strong></td>
     </tr>
 
     <tr>
-        <td>CONTACT ADDRESS</td>
-        <td style="text-align: center;"><strong>{{$userInfo->address}}</strong></td>
-        <td></td>
-    </tr>
-
-    <tr>
-        <td>CONTACT NO</td>
-        <td >CELL NO <strong>{{' '.$userInfo->mobile}}</strong></td>
-        <td></td>
+        <td style="width: 24%;">CONTACT ADDRESS</td>
+        <td style="width: 24%;"><strong>{{$userInfo->address}}</strong></td>
+        <td style="width: 1%"></td>
+        <td style="width: 24%;">CONTACT NO</td>
+        <td style="width: 24%;"><strong>{{' '.$userInfo->mobile}}</strong></td>
     </tr>
 </table>
 <br/>
@@ -275,10 +276,24 @@ $userInfo = \App\Models\User::where('paynumber', $leave->paynumber )->first();
 
     <tr>
         <td>NUMBER OF DAYS DUE</td>
-        <td style="text-align: center;">@if($leave->type_of_leave =='Annual'){{$userInfo->leave_days}} @else{{$userInfo->leave_days}} @endif</td>
-        <td style="text-align: center;"></td>
-        <td style="text-align: center;">N/A</td>
-        <td style="text-align: center;">N/A</td>
+        <td style="text-align: center;">
+            @if($leave->type_of_leave =='Annual')
+                {{$userInfo->leave_days}} 
+            @else
+                {{$userInfo->leave_days}} 
+            @endif
+        </td>
+        <td style="text-align: center;">{{$userInfo->sick_days}}</td>
+        <td style="text-align: center;">
+            @if($userInfo->gender == "Female")
+                {{$userInfo->maternity}}
+            @else
+                N/A
+            @endif
+        </td>
+        <td style="text-align: center;">
+            {{$userInfo->study_leave_days}}
+        </td>
     </tr>
 
 

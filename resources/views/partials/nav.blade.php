@@ -78,10 +78,10 @@
                         <a class="dropdown-item {{ (Request::is('leave-records') || Request::is('leave-records')) ? 'active' : null }}" href="{{ route('leave-records') }}">
                             Leave Records
                         </a>
-                        <div class="dropdown-divider"></div>
+                        {{-- <div class="dropdown-divider"></div>
                         <a class="dropdown-item {{ (Request::is('leave-balances') || Request::is('leave-balances')) ? 'active' : null }}" href="{{ route('leave.balances') }}">
                             Leave Balances
-                        </a>
+                        </a> --}}
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item {{ (Request::is('leave-administration') || Request::is('leave-administration')) ? 'active' : null }}" href="{{ route('leave.admin') }}">
                             Administration
