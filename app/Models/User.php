@@ -47,6 +47,7 @@ class User extends Authenticatable
         'leave_days',
         'mobile',
         'address',
+        'gender',
         'signup_ip_address',
         'signup_confirmation_ip_address',
         'signup_sm_ip_address',

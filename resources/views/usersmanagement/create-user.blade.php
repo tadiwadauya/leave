@@ -150,6 +150,30 @@
                                 </div>
                             </div>
 
+                            <div class="form-group has-feedback row {{ $errors->has('gender') ? ' has-error ' : '' }}">
+                                {!! Form::label('gender', 'Gender', array('class' => 'col-md-3 control-label')); !!}
+                                <div class="col-md-9">
+
+                                    <div class="input-group">
+                                        <select class="form-control" name="gender" id="gender">
+                                            <option value="">Select Gender</option>
+                                            <option value="Male">Male</option>
+                                            <option value="Female">Female</option>
+                                        </select>
+                                        <div class="input-group-append">
+                                            <label class="input-group-text" for="gender">
+                                                <i class="fa fa-fw fa-building" aria-hidden="true"></i>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    @if($errors->has('gender'))
+                                        <span class="help-block">
+                                            <strong>{{ $errors->first('gender') }}</strong>
+                                        </span>
+                                    @endif
+                                </div>
+                            </div>
+
                         <div class="form-group has-feedback row {{ $errors->has('department') ? ' has-error ' : '' }}">
                             {!! Form::label('department', 'Department', array('class' => 'col-md-3 control-label')); !!}
                             <div class="col-md-9">

@@ -185,15 +185,20 @@
                                     @endif
                                 </div>
                             </div>
-                            
+
                             <div class="form-group has-feedback row {{ $errors->has('gender') ? ' has-error ' : '' }}">
                                 {!! Form::label('gender', 'Gender', array('class' => 'col-md-3 control-label')); !!}
                                 <div class="col-md-9">
+
                                     <div class="input-group">
-                                        {!! Form::text('gender', $user->gender, array('id' => 'gender', 'class' => 'form-control', 'placeholder' => trans('forms.create_user_ph_lastname'))) !!}
+                                        <select class="form-control" name="gender" id="gender">
+                                            <option value="{{ $user->gender}}">{{ $user->gender}}</option>
+                                            <option value="Male">Male</option>
+                                            <option value="Female">Female</option>
+                                        </select>
                                         <div class="input-group-append">
                                             <label class="input-group-text" for="gender">
-                                                <i class="fa fa-fw {{ trans('forms.create_user_icon_lastname') }}" aria-hidden="true"></i>
+                                                <i class="fa fa-fw fa-building" aria-hidden="true"></i>
                                             </label>
                                         </div>
                                     </div>
@@ -204,6 +209,9 @@
                                     @endif
                                 </div>
                             </div>
+
+                            
+                          
 
                         <div class="form-group has-feedback row {{ $errors->has('department') ? ' has-error ' : '' }}">
                             {!! Form::label('department', 'Department', array('class' => 'col-md-3 control-label')); !!}
