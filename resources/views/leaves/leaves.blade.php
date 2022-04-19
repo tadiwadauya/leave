@@ -79,7 +79,6 @@
                                     <th>Date To</th>
                                     <th>Applied On</th>
                                     <th>Status</th>
-                                    <th>Note</th>
                                     <th class="no-search no-sort">{!! trans('usersmanagement.users-table.actions') !!}</th>
                                     @role('admin')<th class="no-search no-sort"></th>@endrole
                                 </tr>
@@ -105,7 +104,7 @@
                                             @endif
                                             <span class="badge badge-{{$badgeClass}}"></span>
                                         </td>
-                                        <td>
+                                        {{-- <td>
                                             
                                                @if ($leave->type_of_leave == 'Sick')    <a class="btn btn-sm btn-success btn-block" href="{{ URL::to('leavesick/' . $leave->id) }}">
                                                 <i class="fa fa-eye fa-fw" aria-hidden="true"></i> <span class="hidden-xs hidden-sm">Show</span><span class="hidden-xs hidden-sm hidden-md"> Sicknote</span>
@@ -114,7 +113,7 @@
                                                 @endif 
                                        
                                         
-                                        </td>
+                                        </td> --}}
                                         @role('admin')
                                         <td>
 
