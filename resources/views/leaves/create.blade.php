@@ -150,7 +150,7 @@
                                         <div class="form-group col-lg-6 ">
                                             <label for="mdate">Date From :</label>
                                             <input type="text" name="date_from" class="form-control datepicker"
-                                                   id="datepicker" placeholder="e.g. 31-01-2019" required>
+                                                   id="datepicker" autocomplete="off" placeholder="e.g. 31-01-2019" required>
                                         </div>
 
                                     </div>
@@ -160,7 +160,7 @@
                                         <div class="form-group col-lg-6">
                                             <label for="date-only">Date To :</label>
                                             <input type="text" name="date_to" class="form-control datepicker"
-                                                   id="datepicker2" placeholder="e.g. 31-01-2019" required>
+                                                   id="datepicker2" autocomplete="off" placeholder="e.g. 31-01-2019" required>
                                         </div>
                                     </div>
 
