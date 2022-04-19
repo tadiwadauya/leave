@@ -159,6 +159,23 @@
 
             @endif
 
+            @if ($user->gender)
+
+              <div class="col-sm-5 col-6 text-larger">
+                <strong>
+                  Gender
+                </strong>
+              </div>
+
+              <div class="col-sm-7">
+                {{ $user->gender }}
+              </div>
+
+              <div class="clearfix"></div>
+              <div class="border-bottom"></div>
+
+            @endif
+
             @if ($user->position)
 
               <div class="col-sm-5 col-6 text-larger">
@@ -209,6 +226,42 @@
               <div class="border-bottom"></div>
 
             @endif
+
+            @if ($user->gender == "Female")
+              @if ($user->maternity)
+
+                <div class="col-sm-5 col-6 text-larger">
+                  <strong>
+                    Maternity Days
+                  </strong>
+                </div>
+
+                <div class="col-sm-7">
+                  {{ $user->maternity }}
+                </div>
+
+                <div class="clearfix"></div>
+                <div class="border-bottom"></div>
+
+              @endif
+            @endif
+
+            {{-- @if ($user->study_leave_days)
+
+              <div class="col-sm-5 col-6 text-larger">
+                <strong>
+                  Study Days
+                </strong>
+              </div>
+
+              <div class="col-sm-7">
+                {{ $user->study_leave_days }}
+              </div>
+
+              <div class="clearfix"></div>
+              <div class="border-bottom"></div>
+
+            @endif --}}
 
             @if ($user->mobile)
 

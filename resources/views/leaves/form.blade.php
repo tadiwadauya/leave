@@ -89,7 +89,7 @@ $userInfo = \App\Models\User::where('paynumber', $leave->paynumber )->first();
 
     <tr>
         <td>CONTACT NO</td>
-        <td >CELL NO <strong>{{' '.$userInfo->mobile}}</strong></td>
+        <td > <strong>{{' '.$userInfo->mobile}}</strong></td>
         <td></td>
     </tr>
 </table>
@@ -275,24 +275,29 @@ $userInfo = \App\Models\User::where('paynumber', $leave->paynumber )->first();
 
     <tr>
         <td>NUMBER OF DAYS DUE</td>
-        <td style="text-align: center;">@if($leave->type_of_leave =='Annual'){{$userInfo->leave_days}} @else{{$userInfo->leave_days}} @endif</td>
-        <td style="text-align: center;"></td>
-        <td style="text-align: center;">N/A</td>
-        <td style="text-align: center;">N/A</td>
+        <td style="text-align: center;">
+            @if($leave->type_of_leave =='Annual')
+                {{$userInfo->leave_days}} 
+            @else
+                {{$userInfo->leave_days}} 
+            @endif
+        </td>
+        <td style="text-align: center;">{{$userInfo->sick_days}}</td>
+        <td style="text-align: center;">
+            @if($userInfo->gender == "Female")
+                {{$userInfo->maternity}}
+            @else
+                N/A
+            @endif
+        </td>
+        <td style="text-align: center;">
+            {{$userInfo->study_leave_days}}
+        </td>
     </tr>
 
 
 
-    @foreach($sickleaves as $leaved) @foreach($leaves as $leave)
-    <tr>
-        <td>NUMBER OF DAYS TAKEN</td>
-        <td style="text-align: center;">{{$leave->totalDaysTaken}}</td>
-        <td style="text-align: center;">{{$leaved->totalDaysTaken}}</td>
-        <td style="text-align: center;"></td>
-        <td style="text-align: center;"></td>
-    </tr> 
-    @endforeach 
-    @endforeach 
+   
     <tr>
         <td>NUMBER OF DAYS CASHED</td>
         <td style="text-align: center;"></td>
@@ -311,7 +316,13 @@ $userInfo = \App\Models\User::where('paynumber', $leave->paynumber )->first();
 
     <tr>
         <td>NUMBER OF DAYS LEFT</td>
-        <td style="text-align: center;"> </td>
+        <td style="text-align: center;"> 
+            @if($leave->type_of_leave =='Annual')
+            {{$userInfo->leave_days}} 
+        @else
+            {{$userInfo->leave_days}} 
+        @endif
+        </td>
         <td style="text-align: center;"></td>
         <td style="text-align: center;"></td>
         <td style="text-align: center;"></td>

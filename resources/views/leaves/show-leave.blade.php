@@ -1,8 +1,8 @@
 <?php
 /**
  * Created by PhpStorm.
- * User: Tadiwa Dauya
- * Date: 9/25/2021
+ * User: Vincent Guyo
+ * Date: 9/25/2019
  * Time: 12:48
  */
 ?>
@@ -28,7 +28,17 @@
                                     <i class="fa fa-fw fa-mail-reply" aria-hidden="true"></i>
                                     Back to Leave List
                                 </a>
-
+                                @if ($leave->type_of_leave == 'Sick')
+                                <a href="{{ URL::to('leavesick/' . $leave->id) }}" style="margin-left:3em" class="btn btn-light btn-sm float-right" data-toggle="tooltip" data-placement="left" title="Back to Leave List">
+                                    <i class="fa fa-fw fa-mail-reply" aria-hidden="true"></i>
+                                    Show Sick Note
+                                </a> 
+                                {{-- <a class="btn btn-sm btn-success btn-block" href="{{ URL::to('leavesick/' . $leave->id) }}">
+                                    <i class="fa fa-eye fa-fw" aria-hidden="true"></i> <span class="hidden-xs hidden-sm">Show</span><span class="hidden-xs hidden-sm hidden-md"> Sicknote</span>
+                                </a> --}}
+                                   @elseif ($leave->type_of_leave == 'Study') N/A
+                                    @endif 
+                                  
                                 <a href="{{ url('/leave-pdf/'.$leave->id) }}" class="btn btn-light btn-sm float-right" data-toggle="tooltip" data-placement="left" title="After downloading, submit to Human Resources">
                                     <i class="fa fa-fw fa-download" aria-hidden="true"></i>
                                     Download Form

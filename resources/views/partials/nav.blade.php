@@ -78,10 +78,10 @@
                         <a class="dropdown-item {{ (Request::is('leave-records') || Request::is('leave-records')) ? 'active' : null }}" href="{{ route('leave-records') }}">
                             Leave Records
                         </a>
-                        <div class="dropdown-divider"></div>
+                        {{-- <div class="dropdown-divider"></div>
                         <a class="dropdown-item {{ (Request::is('leave-balances') || Request::is('leave-balances')) ? 'active' : null }}" href="{{ route('leave.balances') }}">
                             Leave Balances
-                        </a>
+                        </a> --}}
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item {{ (Request::is('leave-administration') || Request::is('leave-administration')) ? 'active' : null }}" href="{{ route('leave.admin') }}">
                             Administration
@@ -114,6 +114,35 @@
                         <a class="dropdown-item {{ (Request::is('driver-leave-administration') || Request::is('driver-leave-administration')) ? 'active' : null }}" href="{{ route('driverleave.admin') }}">
                             Administration
                         </a>
+                    </div>
+                </li>
+
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Leave Balances
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item {{ (Request::is('anual-leave-balances') || Request::is('anual-leave-balances')) ? 'active' : null }}"  href="{{ route('leave.balances.anual') }}">
+                            Annual Balances
+                        </a>
+
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item {{ (Request::is('sick-leave-balances') || Request::is('sick-leave-balances')) ? 'active' : null }}" href="{{ route('leave.balances.sick') }}">
+                            Sick Balances
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item {{ (Request::is('martenity-leave-balances') || Request::is('martenity-leave-balances')) ? 'active' : null }}" href="{{ route('leave.balances.martenity') }}">
+                            Maternity Balances
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item {{ (Request::is('study-leave-balances') || Request::is('study-leave-balances')) ? 'active' : null }}" href="{{ route('leave.balances.study') }}">
+                            Study Balances
+                        </a>
+                        {{-- <div class="dropdown-divider"></div>
+                        <a class="dropdown-item {{ (Request::is('leave-balances') || Request::is('leave-balances')) ? 'active' : null }}" href="{{ route('leave.balances') }}">
+                            Compasionate Balances
+                        </a> --}}
+                        
                     </div>
                 </li>
 

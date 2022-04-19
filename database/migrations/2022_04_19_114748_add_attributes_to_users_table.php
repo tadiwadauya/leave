@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddStudyfileToLeaves extends Migration
+class AddAttributesToUsersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,9 @@ class AddStudyfileToLeaves extends Migration
      */
     public function up()
     {
-        Schema::table('leaves', function (Blueprint $table) {
-            $table->string('studyfile')->nullable();
+        Schema::table('users', function (Blueprint $table) {
+            $table->decimal('maternity')->default(98);
+            $table->decimal('study_leave_days')->default(12);
         });
     }
 
@@ -25,7 +26,7 @@ class AddStudyfileToLeaves extends Migration
      */
     public function down()
     {
-        Schema::table('leaves', function (Blueprint $table) {
+        Schema::table('users', function (Blueprint $table) {
             //
         });
     }

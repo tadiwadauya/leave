@@ -70,6 +70,7 @@ class UsersManagementController extends Controller
                 'paynumber'             => 'required|max:255|unique:users',
                 'first_name'            => '',
                 'last_name'             => '',
+                'gender'                => '',
                 'position'              => 'required',
                 'department'            => 'required',
                 'leave_days'            => 'required',
@@ -86,6 +87,7 @@ class UsersManagementController extends Controller
                 'name.required'       => trans('auth.userNameRequired'),
                 'first_name.required' => trans('auth.fNameRequired'),
                 'last_name.required'  => trans('auth.lNameRequired'),
+                'gender.required'      => 'User\'s gender is required',
                 'position.required'  => 'Job title is required to create your profile.',
                 'department.required'  => 'We need to the department you belong to',
                 'leave_days.required'  => 'We need to know the leave days for this user',
@@ -112,6 +114,7 @@ class UsersManagementController extends Controller
             'paynumber'             => $request->input('paynumber'),
             'first_name'       => $request->input('first_name'),
             'last_name'        => $request->input('last_name'),
+            'gender'        => $request->input('gender'),
             'position'            => $request->input('position'),
             'department'            => $request->input('department'),
             'leave_days'            => $request->input('leave_days'),
@@ -207,11 +210,13 @@ class UsersManagementController extends Controller
         $user->paynumber = $request->input('paynumber');
         $user->first_name = $request->input('first_name');
         $user->last_name = $request->input('last_name');
+        $user->gender = $request->input('gender');
         $user->position = $request->input('position');
         $user->department = $request->input('department');
         $user->leave_days = $request->input('leave_days');
         $user->mobile = $request->input('mobile');
         $user->address = $request->input('address');
+        $user->sick_days = $request->input('sick_days');
 
         if ($emailCheck) {
             $user->email = $request->input('email');

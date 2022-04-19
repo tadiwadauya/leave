@@ -99,9 +99,11 @@ $maternityCount = \App\Models\Leave::where('type_of_leave','=','Maternity')->whe
             Sick days taken: {{$sickCount}} / 180
         </p>
         <hr>
-        <p>
-            Maternity days taken: {{$maternityCount}} / 3
-        </p>
+        @if (Auth::user()->gender == "Female")
+            <p>
+                Maternity days taken: {{$maternityCount}} / 98
+            </p>
+        @endif
         <hr>
 
         <p>
@@ -129,9 +131,11 @@ $maternityCount = \App\Models\Leave::where('type_of_leave','=','Maternity')->whe
             Sick days taken: {{$sickCount}} / 180
         </p>
         <hr>
-        <p>
-            Maternity days taken: {{$maternityCount}} / 3
-        </p>
+        @if (Auth::user()->gender == "Female")
+            <p>
+                Maternity days taken: {{$maternityCount}} / 98
+            </p>
+        @endif
         <hr>
         @endrole
 

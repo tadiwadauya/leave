@@ -25,8 +25,7 @@ class Leave extends Model
         'department',
         'address',
         'mobile',
-        'applier_name',
-        'file'
+        'applier_name'
     ];
 
     public function users(){

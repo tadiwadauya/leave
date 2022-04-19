@@ -1,11 +1,11 @@
 <?php
 /**
  * Created by PhpStorm for wls
- * User: Vincent Guyo
- * Date: 1/30/2020
+ * User: Tadiwa Dauya 
+ * Date: 1/30/2022
  * Time: 7:45 AM
  */
-
+$user = Auth::user();
 $paynumber = AUth::user()->paynumber;
 
 $specialCount = \App\Models\Leave::where('type_of_leave','=','Compassionate')->where('paynumber','=',$paynumber)->where('status','=',1)->whereYear('created_at', '=', date('Y'))->sum('days_taken');
@@ -14,7 +14,17 @@ $specialCount = \App\Models\Leave::where('type_of_leave','=','Compassionate')->w
 $sickCount = \App\Models\Leave::where('type_of_leave','=','Sick')->where('paynumber','=',$paynumber)->where('status','=',1)->whereYear('created_at', '=', date('Y'))->sum('days_taken');
 //$sickCount = \App\Models\Leave::where('type_of_leave','=','Sick')->where('status','=',1)->whereYear('created_at', '=', date('Y'))->count();
 //dd($sickCount);
-$maternityCount = \App\Models\Leave::where('type_of_leave','=','Maternity')->where('paynumber','=',$paynumber)->where('status','=',1)->count();
+$maternityCount = \App\Models\Leave::where('type_of_leave','=','Maternity')
+    ->where('paynumber','=',$paynumber)
+    ->where('status','=',1)
+    ->whereYear('created_at', date('Y'))
+    ->sum('days_taken');
+
+$studyCount = \App\Models\Leave::where('type_of_leave','=','Study')
+    ->where('paynumber','=',$paynumber)
+    ->where('status','=',1)
+    ->whereYear('created_at', date('Y'))
+    ->sum('days_taken');
 ?>
 
 <div class="card">
@@ -36,11 +46,20 @@ $maternityCount = \App\Models\Leave::where('type_of_leave','=','Maternity')->whe
         <ul class="list-group">
 
             Special/ Compassionate days taken: {{$specialCount}} / 12
-            <br/>
-            Sick days taken: {{$sickCount}} / 180
-            <br/>
-            Maternity days taken: {{$maternityCount}} / 3
 
+            <br/>
+
+            Sick days taken: {{$sickCount}} / 180
+
+            <br/>
+
+            Study: {{$studyCount}} / 21
+
+            <br/>
+            
+            @if ($user->gender == 'Female')
+                Maternity days taken: {{$maternityCount}} / 98
+            @endif
         </ul>
     </div>
 

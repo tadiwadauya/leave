@@ -10,6 +10,15 @@
         .pw-change-container {
             display: none;
         }
+
+        .form-group {
+            display: flex;
+            align-items: center
+        }
+
+        .form-control {
+            height: 40px;
+        }
     </style>
 
     <link rel="stylesheet" href="//code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css">
@@ -60,6 +69,46 @@
                                 @endif
                             </div>
                         </div>
+
+                        <div class="form-group has-feedback row {{ $errors->has('sick_days') ? ' has-error ' : '' }}">
+                            {!! Form::label('sick_days', 'Sick Days', array('class' => 'col-md-3 control-label')); !!}
+                            <div class="col-md-9">
+                                <div class="input-group">
+                                    {!! Form::text('sick_days', $user->sick_days, array('id' => 'sick_days', 'class' => 'form-control', 'placeholder' => 'e.g. 12.00')) !!}
+                                    <div class="input-group-append">
+                                        <label for="email" class="input-group-text">
+                                            <i class="fa fa-fw fa-code" aria-hidden="true"></i>
+                                        </label>
+                                    </div>
+                                </div>
+                                @if ($errors->has('sick_days'))
+                                    <span class="help-block">
+                                            <strong>{{ $errors->first('sick_days') }}</strong>
+                                        </span>
+                                @endif
+                            </div>
+                        </div>
+
+                        @if ($user->gender == 'Female')
+                            <div class="form-group has-feedback row {{ $errors->has('martenity') ? ' has-error ' : '' }}">
+                                {!! Form::label('martenity', 'Maternity Days', array('class' => 'col-md-3 control-label')); !!}
+                                <div class="col-md-9">
+                                    <div class="input-group">
+                                        {!! Form::text('martenity', $user->maternity, array('id' => 'martenity', 'class' => 'form-control', 'placeholder' => 'e.g. 12.00')) !!}
+                                        <div class="input-group-append">
+                                            <label for="email" class="input-group-text">
+                                                <i class="fa fa-fw fa-code" aria-hidden="true"></i>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    @if ($errors->has('martenity'))
+                                        <span class="help-block">
+                                                <strong>{{ $errors->first('martenity') }}</strong>
+                                            </span>
+                                    @endif
+                                </div>
+                            </div>
+                        @endif
 
                             <div class="form-group has-feedback row {{ $errors->has('name') ? ' has-error ' : '' }}">
                                 {!! Form::label('name', 'Username', array('class' => 'col-md-3 control-label')); !!}
@@ -132,6 +181,25 @@
                                     @if($errors->has('last_name'))
                                         <span class="help-block">
                                             <strong>{{ $errors->first('last_name') }}</strong>
+                                        </span>
+                                    @endif
+                                </div>
+                            </div>
+                            
+                            <div class="form-group has-feedback row {{ $errors->has('gender') ? ' has-error ' : '' }}">
+                                {!! Form::label('gender', 'Gender', array('class' => 'col-md-3 control-label')); !!}
+                                <div class="col-md-9">
+                                    <div class="input-group">
+                                        {!! Form::text('gender', $user->gender, array('id' => 'gender', 'class' => 'form-control', 'placeholder' => trans('forms.create_user_ph_lastname'))) !!}
+                                        <div class="input-group-append">
+                                            <label class="input-group-text" for="gender">
+                                                <i class="fa fa-fw {{ trans('forms.create_user_icon_lastname') }}" aria-hidden="true"></i>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    @if($errors->has('gender'))
+                                        <span class="help-block">
+                                            <strong>{{ $errors->first('gender') }}</strong>
                                         </span>
                                     @endif
                                 </div>

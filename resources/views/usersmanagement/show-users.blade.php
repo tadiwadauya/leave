@@ -74,10 +74,11 @@
                                         <th class="hidden-xs">{!! trans('usersmanagement.users-table.email') !!}</th>
                                         <th class="hidden-xs">{!! trans('usersmanagement.users-table.fname') !!}</th>
                                         <th class="hidden-xs">{!! trans('usersmanagement.users-table.lname') !!}</th>
+                                        <th>Gender</th>
                                         <th>{!! trans('usersmanagement.users-table.role') !!}</th>
                                         <th>Department</th>
                                         <th>Position</th>
-                                        <th> Leave Days</th>
+                                        <th>Leave Days</th>
                                         <th>{!! trans('usersmanagement.users-table.actions') !!}</th>
                                         @permission('delete.users')<th class="no-search no-sort"></th>@endpermission
                                         <th class="no-search no-sort"></th>
@@ -92,6 +93,7 @@
                                             <td class="hidden-xs"><a href="mailto:{{ $user->email }}" title="email {{ $user->email }}">{{ $user->email }}</a></td>
                                             <td class="hidden-xs">{{$user->first_name}}</td>
                                             <td class="hidden-xs">{{$user->last_name}}</td>
+                                            <td class="hidden-xs">{{$user->gender}}</td>
                                             <td>
                                                 @foreach ($user->roles as $user_role)
                                                     @if ($user_role->name == 'User')

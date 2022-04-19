@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddFileToLeaves extends Migration
+class AddGenderToUsersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class AddFileToLeaves extends Migration
      */
     public function up()
     {
-        Schema::table('leaves', function (Blueprint $table) {
-            $table->string('file')->nullable();
+        Schema::table('users', function (Blueprint $table) {
+            $table->string('gender')->default('male');
         });
     }
 
@@ -25,7 +25,7 @@ class AddFileToLeaves extends Migration
      */
     public function down()
     {
-        Schema::table('leaves', function (Blueprint $table) {
+        Schema::table('users', function (Blueprint $table) {
             //
         });
     }

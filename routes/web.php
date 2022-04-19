@@ -167,8 +167,15 @@ Route::group(['middleware' => ['auth', 'activated', 'activity', 'checkblocked']]
     Route::get('leave-administration', 'LeaveController@getLeaveAdmin')->name('leave.admin');
 
     Route::get('leave-balances', 'LeaveController@getLeaveBalances')->name('leave.balances');
-    
-    // Route::get('leavesick/','LeaveController@leavesick');
+
+    Route::get('anual-leave-balances', 'LeaveController@getAnualLeaveBalances')->name('leave.balances.anual');
+
+    Route::get('sick-leave-balances', 'LeaveController@getSickLeaveBalances')->name('leave.balances.sick');
+
+    Route::get('martenity-leave-balances', 'LeaveController@getMaternityLeaveBalances')->name('leave.balances.martenity');
+
+    Route::get('study-leave-balances', 'LeaveController@getStudyLeaveBalances')->name('leave.balances.study');
+
     Route::get('leavesick/{id}','LeaveController@showMysicknote');
     
     Route::get('/leaves/download/{file}','LeaveController@download');
