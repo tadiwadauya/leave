@@ -459,6 +459,12 @@ class LeaveController extends Controller
         } elseif ($request->type_of_leave == 'Sick'){
             
             if($user->sick_days >= 0.5 && $user->sick_days >= $days_taken){
+                $leave=new Leave();
+                if($request->file('file')){
+                    $file=$request->file('file');
+                    $filename=time().'.'.$file->getClientOriginalExtension();
+                    $request->file->move('documents/', $filename);
+                } 
                 $leave = Leave::create([
                     'paynumber' => $request->input('paynumber'),
                     'type_of_leave' => $request->input('type_of_leave'),
@@ -471,6 +477,7 @@ class LeaveController extends Controller
                     'address' => $request->input('address'),
                     'mobile' => $request->input('mobile'),
                 ]);
+                $leave->file = $filename;
                 $leave->save();
             }else{
                 return redirect('/leaves/create')->with('error', 'You have Exceeded The Number Of Days You Can Apply');
