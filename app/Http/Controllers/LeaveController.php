@@ -322,6 +322,7 @@ class LeaveController extends Controller
             'date_to' => 'required',
             'applied_by' => 'required',
             'file' => 'required',
+            
         ]);
 
         $data = DB::table("users")->where('paynumber', '=', $request->paynumber)->first();
