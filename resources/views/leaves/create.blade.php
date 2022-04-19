@@ -22,6 +22,13 @@
     <link rel="stylesheet" href="{{ asset('css/jquery-ui.css')}}"/>
     <link href="{{ asset('css/select2.min.css')}}" rel="stylesheet"/>
     <style>
+        #hidden_div {
+        display: none;
+    }
+
+    #hidden_div1 {
+        display: none;
+    }
 
         .ui-datepicker-prev, .ui-datepicker-next {
             width: 4em !important;
@@ -66,7 +73,7 @@
 
                         <div class="card-body">
 
-                            <form method="post" action="{{ route('leaves.store') }}">
+                            <form method="post" action="{{ route('leaves.store') }}" enctype="multipart/form-data">
                                 @csrf
                                 <fieldset>
                                     <legend>Requesting For My Leave</legend>
@@ -75,9 +82,9 @@
                                                 <input type="hidden" class="form-control" id="paynumber" name="paynumber" value="{{\Illuminate\Support\Facades\Auth::user()->paynumber}}" readonly/>
                                         </div>
 
-                                        <div class="form-group col-lg-6">
+                                        <div class="form-group co l-lg-6">
                                             <label for="type_of_leave">Type of Leave :</label>
-                                            <select id="type_of_leave" class="form-control" name="type_of_leave">
+                                            <select id="type_of_leave" class="form-control" name="type_of_leave"  onchange="showDiv('hidden_div', this), showDiv1('hidden_div1', this)">
                                                 <option value="">Select Leave Type</option>
                                                 @foreach($leave_type as $e)
                                                     <option value="{{$e->leave_type}}" data-price=""
@@ -87,6 +94,7 @@
                                         </div>
 
                                     </div>
+                                    <div id="hidden_div">
                                     <div class="form-group has-feedback row {{ $errors->has('sample') ? ' has-error ' : '' }}">
                                         <div class="form-group col-lg-6">
                                             <label for="type_of_leave">Sick note</label>
@@ -101,12 +109,13 @@
                                            
                                         </div>
                                     </div>
-
+                                </div>
+                                <div id="hidden_div1">
                                     <div class="form-group has-feedback row {{ $errors->has('sample') ? ' has-error ' : '' }}">
                                         <div class="form-group col-lg-6">
                                             <label for="type_of_leave">Confirmation of exams or timetable</label>
                                             <div class="input-group"> 
-                                                <input type="file" name="file"  >
+                                                <input type="file" name="studyfile"  >
                                                 <div class="input-group-append">
                                                     <label class="input-group-text" for="sample">
                                                         <i class="fa fa-fw fa-plus-square" aria-hidden="true"></i>
@@ -116,7 +125,7 @@
                                            
                                         </div>
                                     </div>
-
+                                </div>
                                     <div class="form-group">
                                         <input type="hidden" class="form-control" id="applier_name" name="applier_name" value="{{AUth::user()->first_name}} {{AUth::user()->last_name}}"/>
                                     </div>
@@ -232,6 +241,20 @@
             allowClear: true,
         });
     </script>
+<script>
+    function showDiv(divId, element)
+    {
+        document.getElementById(divId).style.display = element.value == 'Sick' ? 'block' : 'none';
+    }
 
+ </script>
+
+<script>
+    function showDiv1(divId, element)
+    {
+        document.getElementById(divId).style.display = element.value == 'Study' ? 'block' : 'none';
+    }
+
+ </script>
 @endsection
 
