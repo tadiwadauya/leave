@@ -78,6 +78,16 @@ class LeaveController extends Controller
         return View('leaves.leaves', compact('leaves'));
     }
 
+    public function showMysicknote($id)
+    {
+        $leave = Leave::findOrFail($id);
+        return view('leaves.show-my-sicknote', compact('leave'));
+    }
+
+    public function download($file){
+        return response()->download('documents/'.$file);
+    }
+    
     public function manage(){
 
         $user = Auth::user();
