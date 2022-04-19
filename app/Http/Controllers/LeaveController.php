@@ -364,18 +364,47 @@ class LeaveController extends Controller
                     ->get();
             } else {
 
-                $fdDepts = array('Accounts', 'I.T.', 'Internal Audit', 'Customs', 'SADC Accounts','Directors');
+                $fdDepts1 = array('Accounts', 'I.T.', 'Internal Audit', 'Customs', 'SADC Accounts');
+                $dirDept = array('Directors');
+                //Nathi
+                $dirDept1 = array('Finance Director');
+                $dirDept2 = array('Technical Director');
+                $dirDept3 =  array('Managing Director');
+               
                 $techdDepts = array('Operations', 'Roadgrip', 'Tyres and Tarps', 'Human Resources', 'Engineering','Horses Workshop');
                 $opsHod = array('Beitbridge', 'Chirundu', 'Victoria Falls', 'Forbes');
                 $engHod = array('Trailers', 'Sales');
                 $accHod = array('Stores', 'Diesel');
                 $mdDepts = array('Directors');
 
-                if (in_array($request->department, $fdDepts)) {
+                if (in_array($request->department, $fdDepts1)) {
                     $approvers = DB::table('users')
                         ->select('users.paynumber', 'users.first_name', 'users.last_name', 'users.email', 'users.department')
                         ->where('users.position', '=', 'Finance Director')
+                    
                         ->get();
+              //Nathi
+                }elseif(in_array($request->department,$dirDept1)){
+                        $approvers = DB::table('users')
+                       ->select('users.paynumber', 'users.first_name', 'users.last_name', 'users.email', 'users.department')
+                      ->where('users.position', '=', 'Managing Director')
+                       ->orwhere('users.position', '=', 'Technical Director')
+                     ->get();
+                }elseif(in_array($request->department,$dirDept2)){
+                      $approvers = DB::table('users')
+                      ->select('users.paynumber', 'users.first_name', 'users.last_name', 'users.email', 'users.department')
+                      ->where('users.position', '=', 'Managing Director')
+                       ->orwhere('users.position', '=', 'Finance Director')
+                      ->get();
+
+                }elseif(in_array($request->department,$dirDept3)){
+                       $approvers = DB::table('users')
+                       ->select('users.paynumber', 'users.first_name', 'users.last_name', 'users.email', 'users.department')
+                       ->where('users.position', '=', 'Technical Director')
+                       ->orwhere('users.position', '=', 'Finance Director')
+                      ->get();
+                
+               
                 } elseif (in_array($request->department, $techdDepts)) {
                     $approvers = DB::table('users')
                         ->select('users.paynumber', 'users.first_name', 'users.last_name', 'users.email', 'users.department')
