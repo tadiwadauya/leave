@@ -46,15 +46,6 @@
                             <span id="card_title">
                                 Study Balances
                             </span>
-
-                            <div class="btn-group pull-right btn-group-xs">
-                                <div class="btn pull-left btn-group-xs">
-                                  <a class="btn btn-primary btn-info btn-block" href="{{route('bulk.update')}}">
-                                        <i class="fa fa-fw fa-pied-piper" aria-hidden="true"></i>
-                                        Update Days
-                                    </a>
-                                </div>
-                            </div>
                         </div>
                     </div>
 
