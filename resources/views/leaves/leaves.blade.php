@@ -141,6 +141,7 @@
                             </table>
 
                         </div>
+                        {{$leaves->links()}}
                     </div>
                 </div>
             </div>

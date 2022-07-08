@@ -177,8 +177,12 @@ Route::group(['middleware' => ['auth', 'activated', 'activity', 'checkblocked']]
     Route::get('study-leave-balances', 'LeaveController@getStudyLeaveBalances')->name('leave.balances.study');
 
     Route::get('leavesick/{id}','LeaveController@showMysicknote');
+
+    Route::get('leave-study/{id}','LeaveController@showCalendar');
     
     Route::get('/leaves/download/{file}','LeaveController@download');
+    
+    Route::get('/leaves/download/{file}','LeaveController@downloadCalendar');
 
     Route::get('/leaves/approve/{id}', ['as' => 'approve.leave', 'uses' => 'LeaveController@activate']);
     Route::get('/leaves/reject/{id}', ['as' => 'reject.leave', 'uses' => 'LeaveController@reject']);

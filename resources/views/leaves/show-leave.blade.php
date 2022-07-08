@@ -36,7 +36,11 @@
                                 {{-- <a class="btn btn-sm btn-success btn-block" href="{{ URL::to('leavesick/' . $leave->id) }}">
                                     <i class="fa fa-eye fa-fw" aria-hidden="true"></i> <span class="hidden-xs hidden-sm">Show</span><span class="hidden-xs hidden-sm hidden-md"> Sicknote</span>
                                 </a> --}}
-                                   @elseif ($leave->type_of_leave == 'Study') N/A
+                                   @elseif ($leave->type_of_leave == 'Study')
+                                   <a href="{{ URL::to('leave-study/' . $leave->id) }}" style="margin-left:3em" class="btn btn-light btn-sm float-right" data-toggle="tooltip" data-placement="left" title="Back to Leave List">
+                                    <i class="fa fa-fw fa-mail-reply" aria-hidden="true"></i>
+                                    Show Study Calendar
+                                </a> 
                                     @endif 
                                   
                                 <a href="{{ url('/leave-pdf/'.$leave->id) }}" class="btn btn-light btn-sm float-right" data-toggle="tooltip" data-placement="left" title="After downloading, submit to Human Resources">

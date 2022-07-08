@@ -50,21 +50,21 @@ class LeaveController extends Controller
                 })
                 ->select('u.paynumber','u.first_name','u.last_name','u.department','l.type_of_leave','l.id','l.days_taken','l.date_from','l.date_to','l.created_at','l.status')
                 ->where('u.paynumber','=', $paynumber)
-                ->get();
+                ->paginate(10);
         } elseif($admin){
             $leaves = DB::table('leaves as l')
                 ->join('users as u', function($join) {
                     $join->on('u.paynumber', '=', 'l.paynumber');
                 })
                 ->select('u.paynumber','u.first_name','u.last_name','u.department','l.type_of_leave','l.id','l.days_taken','l.date_from','l.date_to','l.created_at','l.status')
-                ->get();
+                ->paginate(10);
         }elseif ($hrmain){
             $leaves = DB::table('leaves as l')
                 ->join('users as u', function($join) {
                     $join->on('u.paynumber', '=', 'l.paynumber');
                 })
                 ->select('u.paynumber','u.first_name','u.last_name','u.department','l.type_of_leave','l.id','l.days_taken','l.date_from','l.date_to','l.created_at','l.status')
-                ->get();
+                ->paginate(10);
         }else{
             $leaves = DB::table('leaves as l')
                 ->join('users as u', function($join) {
@@ -72,7 +72,7 @@ class LeaveController extends Controller
                 })
                 ->select('u.paynumber','u.first_name','u.last_name','u.department','l.type_of_leave','l.id','l.days_taken','l.date_from','l.date_to','l.created_at','l.status')
                 ->latest()
-                ->get();
+                ->paginate(10);
         }
 
         return View('leaves.leaves', compact('leaves'));
@@ -86,6 +86,16 @@ class LeaveController extends Controller
 
     public function download($file){
         return response()->download('documents/'.$file);
+    }
+
+    public function showCalendar($id)
+    {
+        $leave = Leave::findOrFail($id);
+        return view('leaves.show-calendar', compact('leave'));
+    }
+
+    public function downloadCalendar($studyfile){
+        return response()->download('documents/study/'.$studyfile);
     }
     
     public function manage(){
@@ -610,6 +620,14 @@ class LeaveController extends Controller
         }elseif ($request->type_of_leave == 'Study'){
             
             if ($user->study_leave_days >= 0.5 && $user->study_leave_days >= $days_taken) {
+                $leave=new Leave();
+                if($request->file('studyfile')){
+                    $file=$request->file('studyfile');
+                    $filename=time().'.'.$file->getClientOriginalExtension();
+                    $request->studyfile->move('documents/study/', $filename);
+                
+                } 
+              
                 $leave = Leave::create([
                     'paynumber' => $request->input('paynumber'),
                     'type_of_leave' => $request->input('type_of_leave'),
@@ -622,6 +640,7 @@ class LeaveController extends Controller
                     'address' => $request->input('address'),
                     'mobile' => $request->input('mobile'),
                 ]);
+                $leave->studyfile = $filename;
                 $leave->save();
             } else {
                 return redirect('/leaves/create')->with('error', 'You have Exceeded The Number Of Days You Can Apply');
@@ -743,6 +762,7 @@ class LeaveController extends Controller
             $details = [
                 'greeting' => 'Good day, ' . $user->first_name,
                 'body' => 'Your leave request for '.$leave->days_taken . ' day(s) from '. $leave->date_from. ' to ' .$leave->date_to. ' was approved. Enjoy your rest.' ,
+                'url' => 'http://127.0.0.1:8000/leave-pdf/' . $leave->id
 
             ];
 
@@ -825,7 +845,8 @@ class LeaveController extends Controller
 
         $details = [
             'greeting' => 'Good day, ' . $user->first_name,
-            'body' => 'Your leave request for '.$leave->days_taken . ' day(s) from '. $leave->date_from. ' to ' .$leave->date_to. ' was approved. You can now download your leave form.' ,
+            'body' => 'Your leave request for '.$leave->days_taken . ' day(s) from '. $leave->date_from. ' to ' .$leave->date_to. ' was approved. You can now download your leave form. You can go ahead and Download the form' ,
+            'url' => 'http://127.0.0.1:8000/leave-pdf/' . $leave->id
 
         ];
 
