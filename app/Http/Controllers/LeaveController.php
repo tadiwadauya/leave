@@ -1109,16 +1109,53 @@ class LeaveController extends Controller
     {
         $users = User::all();
 
+        $lastValue = 66;
+
+        foreach ($users as $user) {
+
+            if(($user->leave_days + 1.833) <= $lastValue) {
+                DB::table("users")
+                ->where('id', '=', $user->id)
+                ->update([
+                    'updated_at' => now(),
+                    'leave_days' => $user->leave_days + 1.833
+                ]);
+            } elseif ($user->leave_days >= $lastValue) {
+                DB::table("users")
+                ->where('id', '=', $user->id)
+                ->update([
+                    'updated_at' => now(),
+                    'leave_days' => $lastValue
+                ]);
+            } else {
+                $user->leave_days = $user->leave_days + 1.833;
+
+                if ($user->leave_days > $lastValue){
+                    DB::table("users")
+                        ->where('id', '=', $user->id)
+                        ->update([
+                            'updated_at' => now(),
+                            'leave_days' => $lastValue
+                        ]);
+                }
+            }
+        }
+        return redirect()->back()->with('success', 'Leave days updated successfully');
+    }
+
+    public function bulkDeductor()
+    {
+        $users = User::all();
+
         foreach ($users as $user) {
 
             DB::table("users")
                 ->where('id', '=', $user->id)
                 ->update([
                     'updated_at' => now(),
-                    'leave_days' => $user->leave_days + 1.833
+                    'leave_days' => $user->leave_days - 1.833
                 ]);
         }
-
         return redirect()->back()->with('success', 'Leave days updated successfully');
     }
 }
