@@ -193,12 +193,12 @@ class UsersManagementController extends Controller
             $validator = Validator::make($request->all(), [
                 'paynumber'     => 'required|max:255',
                 'email'    => 'email|max:255|unique:users',
-                'password' => 'present|confirmed|min:6',
+                // 'password' => 'present|confirmed|min:6',
             ]);
         } else {
             $validator = Validator::make($request->all(), [
                 'paynumber'     => 'required|max:255',
-                'password' => 'nullable|confirmed|min:6',
+                // 'password' => 'nullable|confirmed|min:6',
             ]);
         }
 

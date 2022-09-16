@@ -1,9 +1,9 @@
 @component('mail::message')
-{{$details['greeting']}}
+    {{ $details['greeting'] }}
 
-{{$details['body']}}
+    {{ $details['body'] }}
 
 
-Thanks,<br>
-{{ config('app.name') }}
+    Thanks,<br>
+    {{ config('app.name') }}
 @endcomponent

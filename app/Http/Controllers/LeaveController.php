@@ -736,7 +736,7 @@ class LeaveController extends Controller
             $details = [
                 'greeting' => 'Good day, ' . $user->first_name,
                 'body' => 'Your leave request for ' . $leave->days_taken . ' day(s) from ' . $leave->date_from . ' to ' . $leave->date_to . ' was approved. Enjoy your rest.',
-
+                'url' => '127.0.0.1:8000/leaves-pdf/' . $leave->id
             ];
 
             if ($leave->type_of_leave == 'Annual' or $leave->type_of_leave == 'Cash in Lieu of Leave (CILL)' or $leave->type_of_leave == 'Off Day') {
@@ -778,7 +778,7 @@ class LeaveController extends Controller
             }
 
             if (!in_array($user->paynumber, $unidentified)) {
-                Mail::to($user->email)->cc(["payrolladmin@whelson.co.zw"])->send(new LeaveHasApproved($details));
+                Mail::to($user->email)->send(new LeaveHasApproved($details));
             } else {
                 Mail::to($user->email)->send(new LeaveHasApproved($details));
             }
@@ -810,62 +810,62 @@ class LeaveController extends Controller
         $leave->approver_name = Auth::user()->first_name . ' ' . Auth::user()->last_name;
         $leave->save();
 
-        $user = User::where('paynumber', '=', $leave->paynumber)->first();
+        if ($leave->save()) {
+            $user = User::where('paynumber', '=', $leave->paynumber)->first();
 
-        $details = [
-            'greeting' => 'Good day, ' . $user->first_name,
-            'body' => 'Your leave request for ' . $leave->days_taken . ' day(s) from ' . $leave->date_from . ' to ' . $leave->date_to . ' was approved. You can now download your leave form.',
+            if ($leave->type_of_leave == 'Annual' or $leave->type_of_leave == 'Cash in Lieu of Leave (CILL)' or $leave->type_of_leave == 'Off Day') {
+                $mazuvaAtorwa = $leave->days_taken;
+                $mazuvaAsara = $user->leave_days - $mazuvaAtorwa;
 
-        ];
+                //DB::table("users")->update('leave_days')->first();
+                DB::table('users')
+                    ->where('paynumber', $leave->paynumber)
+                    ->update([
+                        'leave_days' => $mazuvaAsara,
+                    ]);
+            } elseif ($leave->type_of_leave == 'Sick') {
+                $sickdaystaken = $leave->days_taken;
+                $sickdaysleft = $user->sick_days - $sickdaystaken;
 
-        if ($leave->type_of_leave == 'Annual' or $leave->type_of_leave == 'Cash in Lieu of Leave (CILL)' or $leave->type_of_leave == 'Off Day') {
-            $mazuvaAtorwa = $leave->days_taken;
-            $mazuvaAsara = $user->leave_days - $mazuvaAtorwa;
+                DB::table('users')
+                    ->where('paynumber', $leave->paynumber)
+                    ->update([
+                        'sick_days' => $sickdaysleft,
+                    ]);
+            } elseif ($leave->type_of_leave == 'Maternity') {
+                $maternitydaystaken = $leave->days_taken;
+                $maternitydaysleft = $user->maternity - $maternitydaystaken;
 
-            //DB::table("users")->update('leave_days')->first();
-            DB::table('users')
-                ->where('paynumber', $leave->paynumber)
-                ->update([
-                    'leave_days' => $mazuvaAsara,
-                ]);
-        } elseif ($leave->type_of_leave == 'Sick') {
-            $sickdaystaken = $leave->days_taken;
-            $sickdaysleft = $user->sick_days - $sickdaystaken;
+                DB::table('users')
+                    ->where('paynumber', $leave->paynumber)
+                    ->update([
+                        'maternity' => $maternitydaysleft,
+                    ]);
+            } elseif ($leave->type_of_leave == 'Study') {
+                $studydaystaken = $leave->days_taken;
+                $studydaysleft = $user->study_leave_days - $studydaystaken;
 
-            DB::table('users')
-                ->where('paynumber', $leave->paynumber)
-                ->update([
-                    'sick_days' => $sickdaysleft,
-                ]);
-        } elseif ($leave->type_of_leave == 'Maternity') {
-            $maternitydaystaken = $leave->days_taken;
-            $maternitydaysleft = $user->maternity - $maternitydaystaken;
+                DB::table('users')
+                    ->where('paynumber', $leave->paynumber)
+                    ->update([
+                        'study_leave_days' => $studydaysleft,
+                    ]);
+            }
 
-            DB::table('users')
-                ->where('paynumber', $leave->paynumber)
-                ->update([
-                    'maternity' => $maternitydaysleft,
-                ]);
-        } elseif ($leave->type_of_leave == 'Study') {
-            $studydaystaken = $leave->days_taken;
-            $studydaysleft = $user->study_leave_days - $studydaystaken;
+            $details = [
+                'greeting' => 'Good day, ' . $user->first_name,
+                'body' => 'Your leave request for ' . $leave->days_taken . ' day(s) from ' . $leave->date_from . ' to ' . $leave->date_to . ' was approved. You can now download your leave form.',
+                'url' => '127.0.0.1:8000/leaves-pdf/' . $leave->id
 
-            DB::table('users')
-                ->where('paynumber', $leave->paynumber)
-                ->update([
-                    'study_leave_days' => $studydaysleft,
-                ]);
+            ];
+
+            if (!in_array($user->paynumber, $unidentified)) {
+                Mail::to($user->email)->send(new LeaveHasApproved($details));
+            } else {
+                Mail::to($user->email)->send(new LeaveHasApproved($details));
+            }
+            return redirect()->route('manage-leave')->with('success', 'Request approved successfully');
         }
-
-        if (!in_array($user->paynumber, $unidentified)) {
-            Mail::to($user->email)->cc(["payrolladmin@whelson.co.zw"])->send(new LeaveHasApproved($details));
-        } else {
-
-            Mail::to($user->email)->send(new LeaveHasApproved($details));
-        }
-
-
-        return redirect()->route('manage-leave')->with('success', 'Request approved successfully');
     }
 
     /**
