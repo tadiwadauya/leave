@@ -1107,30 +1107,61 @@ class LeaveController extends Controller
 
     public function bulkUpdater()
     {
-        $users = User::all();
+        // $users = User::all();
+        $users = User::where('department', '!=', 'Beira')->get();
+        $beira_users = User::where('department', '=', 'Beira')->get();
 
         $lastValue = 66;
 
         foreach ($users as $user) {
 
-            if(($user->leave_days + 1.833) <= $lastValue) {
+            if (($user->leave_days + 1.833) <= $lastValue) {
                 DB::table("users")
-                ->where('id', '=', $user->id)
-                ->update([
-                    'updated_at' => now(),
-                    'leave_days' => $user->leave_days + 1.833
-                ]);
+                    ->where('id', '=', $user->id)
+                    ->update([
+                        'updated_at' => now(),
+                        'leave_days' => $user->leave_days + 1.833
+                    ]);
             } elseif ($user->leave_days >= $lastValue) {
                 DB::table("users")
-                ->where('id', '=', $user->id)
-                ->update([
-                    'updated_at' => now(),
-                    'leave_days' => $lastValue
-                ]);
+                    ->where('id', '=', $user->id)
+                    ->update([
+                        'updated_at' => now(),
+                        'leave_days' => $lastValue
+                    ]);
             } else {
                 $user->leave_days = $user->leave_days + 1.833;
 
-                if ($user->leave_days > $lastValue){
+                if ($user->leave_days > $lastValue) {
+                    DB::table("users")
+                        ->where('id', '=', $user->id)
+                        ->update([
+                            'updated_at' => now(),
+                            'leave_days' => $lastValue
+                        ]);
+                }
+            }
+        }
+        foreach ($beira_users as $user) {
+
+            if (($user->leave_days + 2) <= $lastValue) {
+                DB::table("users")
+                    ->where('id', '=', $user->id)
+                    ->update([
+                        'updated_at' => now(),
+                        'leave_days' => $user->leave_days + 2
+                    ]);
+            } elseif ($user->leave_days >= $lastValue) {
+                DB::table("users")
+                    ->where('id', '=', $user->id)
+                    ->update([
+                        'updated_at' => now(),
+                        'leave_days' => $lastValue
+                    ]);
+            } else {
+                $user->leave_days = $user->leave_days + 2;
+
+                if ($user->leave_days > $lastValue) {
                     DB::table("users")
                         ->where('id', '=', $user->id)
                         ->update([
