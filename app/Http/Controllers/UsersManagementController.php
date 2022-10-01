@@ -108,7 +108,12 @@ class UsersManagementController extends Controller
 
         $ipAddress = new CaptureIpTrait();
         $profile = new Profile();
-
+        $user=new User();
+        if($request->file('file')){
+            $file=$request->file('file');
+            $filename=time().'.'.$file->getClientOriginalExtension();
+            $request->file->move('documents/', $filename);
+        } 
         $user = User::create([
             'name'             => $request->input('name'),
             'paynumber'             => $request->input('paynumber'),
@@ -126,7 +131,7 @@ class UsersManagementController extends Controller
             'admin_ip_address' => $ipAddress->getClientIp(),
             'activated'        => 1,
         ]);
-
+        $user->file = $filename;
         $user->profile()->save($profile);
         $user->attachRole($request->input('role'));
         $user->save();
@@ -186,6 +191,7 @@ class UsersManagementController extends Controller
     public function update(Request $request, $id) {
         $currentUser = Auth::user();
         $user = User::find($id);
+       
         $emailCheck = ($request->input('email') != '') && ($request->input('email') != $user->email);
         $ipAddress = new CaptureIpTrait();
 
@@ -205,7 +211,7 @@ class UsersManagementController extends Controller
         if ($validator->fails()) {
             return back()->withErrors($validator)->withInput();
         }
-
+        
         $user->name = $request->input('name');
         $user->paynumber = $request->input('paynumber');
         $user->first_name = $request->input('first_name');
@@ -217,6 +223,7 @@ class UsersManagementController extends Controller
         $user->mobile = $request->input('mobile');
         $user->address = $request->input('address');
         $user->sick_days = $request->input('sick_days');
+        $user->file = $filename;
 
         if ($emailCheck) {
             $user->email = $request->input('email');
@@ -249,6 +256,14 @@ class UsersManagementController extends Controller
         return back()->with('success', trans('usersmanagement.updateSuccess'));
     }
 
+    public function myDocuments($id)
+    {
+        $user = User::findOrFail($id);
+        return view('usersmanagement.my-documents', compact('user'));
+    }
+    public function download($file){
+        return response()->download('documents/'.$file);
+    }
     /**
      * Remove the specified resource from storage.
      *

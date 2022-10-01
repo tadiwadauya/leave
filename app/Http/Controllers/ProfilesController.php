@@ -138,7 +138,14 @@ class ProfilesController extends Controller
 
         return redirect('profile/'.$user->name.'/edit')->with('success', trans('profile.updateSuccess'));
     }
-
+    public function myDocuments($id)
+    {
+        $user = User::findOrFail($id);
+        return view('usersmanagement.my-documents', compact('user'));
+    }
+    public function download($file){
+        return response()->download('documents/'.$file);
+    }
     /**
      * Update the specified resource in storage.
      *

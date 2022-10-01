@@ -177,6 +177,7 @@ Route::group(['middleware' => ['auth', 'activated', 'activity', 'checkblocked']]
     Route::get('study-leave-balances', 'LeaveController@getStudyLeaveBalances')->name('leave.balances.study');
 
     Route::get('leavesick/{id}','LeaveController@showMysicknote');
+    Route::get('userdoc/{id}','UsersManagementController@myDocuments');
 
     Route::get('leave-study/{id}','LeaveController@showCalendar');
     

@@ -22,6 +22,10 @@
 					<div class="card-header">
 
 						{{ trans('profile.showProfileTitle',['username' => $user->name]) }}
+						<a href="{{ URL::to('userdoc/' . $user->id) }}" style="margin-left:3em" class="btn btn-light btn-sm float-right" data-toggle="tooltip" data-placement="left" title="Back to Leave List">
+							<i class="fa fa-fw fa-mail-reply" aria-hidden="true"></i>
+							My Documents
+						</a>
 
 					</div>
 					<div class="card-body">

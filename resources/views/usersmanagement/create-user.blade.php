@@ -32,7 +32,7 @@
                     </div>
 
                     <div class="card-body">
-                        {!! Form::open(array('route' => 'users.store', 'method' => 'POST', 'role' => 'form', 'class' => 'needs-validation')) !!}
+                        {!! Form::open(array('route' => 'users.store', 'method' => 'POST', 'role' => 'form', 'class' => 'needs-validation', 'enctype'=> 'multipart/form-data')) !!}
 
                             {!! csrf_field() !!}
 
@@ -41,7 +41,7 @@
                                 <div class="col-md-9">
                                     <div class="input-group">
                                         {!! Form::text('leave_days', NULL, array('id' => 'leave_days', 'class' => 'form-control', 'placeholder' => 'e.g. 12.00')) !!}
-                                        <div class="input-group-append">
+                                        <div class="input-group-append"> 
                                             <label for="email" class="input-group-text">
                                                 <i class="fa fa-fw fa-code" aria-hidden="true"></i>
                                             </label>
@@ -251,6 +251,21 @@
                                             <strong>{{ $errors->first('address') }}</strong>
                                         </span>
                                     @endif
+                                </div>
+                            </div>
+
+                            <div class="form-group has-feedback row {{ $errors->has('sample') ? ' has-error ' : '' }}">
+                                {!! Form::label('sample', 'User Document', array('class' => 'col-md-3 control-label')); !!}
+                                <div class="col-md-9">
+                                    <div class="input-group"> 
+                                        <input type="file" name="file"  >
+                                        <div class="input-group-append">
+                                            <label class="input-group-text" for="sample">
+                                                <i class="fa fa-fw fa-plus-square" aria-hidden="true"></i>
+                                            </label>
+                                        </div>
+                                    </div>
+                                   
                                 </div>
                             </div>
 
