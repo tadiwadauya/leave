@@ -34,7 +34,7 @@ class UsersManagementController extends Controller
         $users = User::all();
         $roles = Role::all();
 
-        return View('usersmanagement.show-users', compact('users', 'roles'));
+        return View('usersmanagement.mock-user', compact('users', 'roles'));
     }
 
     /**
@@ -64,7 +64,8 @@ class UsersManagementController extends Controller
      */
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(),
+        $validator = Validator::make(
+            $request->all(),
             [
                 'name'                  => 'required|max:255|unique:users',
                 'paynumber'             => 'required|max:255|unique:users',
@@ -108,12 +109,12 @@ class UsersManagementController extends Controller
 
         $ipAddress = new CaptureIpTrait();
         $profile = new Profile();
-        $user=new User();
-        if($request->file('file')){
-            $file=$request->file('file');
-            $filename=time().'.'.$file->getClientOriginalExtension();
+        $user = new User();
+        if ($request->file('file')) {
+            $file = $request->file('file');
+            $filename = time() . '.' . $file->getClientOriginalExtension();
             $request->file->move('documents/', $filename);
-        } 
+        }
         $user = User::create([
             'name'             => $request->input('name'),
             'paynumber'             => $request->input('paynumber'),
@@ -188,10 +189,11 @@ class UsersManagementController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id) {
+    public function update(Request $request, $id)
+    {
         $currentUser = Auth::user();
         $user = User::find($id);
-       
+
         $emailCheck = ($request->input('email') != '') && ($request->input('email') != $user->email);
         $ipAddress = new CaptureIpTrait();
 
@@ -211,7 +213,7 @@ class UsersManagementController extends Controller
         if ($validator->fails()) {
             return back()->withErrors($validator)->withInput();
         }
-        
+
         $user->name = $request->input('name');
         $user->paynumber = $request->input('paynumber');
         $user->first_name = $request->input('first_name');
@@ -261,8 +263,9 @@ class UsersManagementController extends Controller
         $user = User::findOrFail($id);
         return view('usersmanagement.my-documents', compact('user'));
     }
-    public function download($file){
-        return response()->download('documents/'.$file);
+    public function download($file)
+    {
+        return response()->download('documents/' . $file);
     }
     /**
      * Remove the specified resource from storage.
@@ -315,9 +318,9 @@ class UsersManagementController extends Controller
             ], Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
-        $results = User::where('id', 'like', $searchTerm.'%')
-            ->orWhere('name', 'like', $searchTerm.'%')
-            ->orWhere('email', 'like', $searchTerm.'%')->get();
+        $results = User::where('id', 'like', $searchTerm . '%')
+            ->orWhere('name', 'like', $searchTerm . '%')
+            ->orWhere('email', 'like', $searchTerm . '%')->get();
 
         // Attach roles to results
         foreach ($results as $result) {

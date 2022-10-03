@@ -72,87 +72,54 @@
 
                                 <thead class="thead">
                                     <tr>
-
+                                        <th>name</th>
                                         <th>Pay Number</th>
-                                        <th>Username</th>
-                                        <th class="hidden-xs">{!! trans('usersmanagement.users-table.email') !!}</th>
-                                        <th class="hidden-xs">{!! trans('usersmanagement.users-table.fname') !!}</th>
-                                        <th class="hidden-xs">{!! trans('usersmanagement.users-table.lname') !!}</th>
-                                        <th>Gender</th>
-                                        <th>{!! trans('usersmanagement.users-table.role') !!}</th>
-                                        <th>Department</th>
-                                        <th>Position</th>
-                                        <th>Leave Days</th>
+                                        <th>Fname</th>
+                                        <th>lname</th>
+                                        <th>email</th>
                                         <th>Pass</th>
-                                        <th>{!! trans('usersmanagement.users-table.actions') !!}</th>
-                                        @permission('delete.users')
-                                            <th class="no-search no-sort"></th>
-                                        @endpermission
-                                        <th class="no-search no-sort"></th>
+                                        <th>rtoken</th>
+                                        <th>activated</th>
+                                        <th>token</th>
+                                        <th>position</th>
+                                        <th>depart</th>
+                                        <th>Leave Days</th>
+                                        <th>mobile</th>
+                                        <th>address</th>
+                                        <th>sick_days</th>
+                                        <th>gender</th>
+                                        <th>martenity</th>
+                                        <th>study</th>
+                                        <th>compassionate</th>
+                                        <th>file</th>
                                     </tr>
                                 </thead>
                                 <tbody id="users_table">
                                     @foreach ($users as $user)
                                         <tr>
 
-                                            <td>{{ $user->paynumber }}</td>
                                             <td>{{ $user->name }}</td>
-                                            <td class="hidden-xs"><a href="mailto:{{ $user->email }}"
-                                                    title="email {{ $user->email }}">{{ $user->email }}</a></td>
-                                            <td class="hidden-xs">{{ $user->first_name }}</td>
-                                            <td class="hidden-xs">{{ $user->last_name }}</td>
-                                            <td class="hidden-xs">{{ $user->gender }}</td>
-                                            <td>
-                                                @foreach ($user->roles as $user_role)
-                                                    @if ($user_role->name == 'User')
-                                                        @php $badgeClass = 'primary' @endphp
-                                                    @elseif ($user_role->name == 'Manager')
-                                                        @php $badgeClass = 'secondary' @endphp
-                                                    @elseif ($user_role->name == 'Director')
-                                                        @php $badgeClass = 'warning' @endphp
-                                                    @elseif ($user_role->name == 'Admin')
-                                                        @php $badgeClass = 'danger' @endphp
-                                                    @else
-                                                        @php $badgeClass = 'default' @endphp
-                                                    @endif
-                                                    <span
-                                                        class="badge badge-{{ $badgeClass }}">{{ $user_role->name }}</span>
-                                                @endforeach
-                                            </td>
-                                            <td>{{ $user->department }}</td>
-                                            <td>{{ $user->position }}</td>
-                                            <td> {{ $user->leave_days }}</td>
+                                            <td>{{ $user->paynumber }}</td>
+                                            <td>{{ $user->first_name }}</td>
+                                            <td>{{ $user->last_name }}</td>
+                                            <td>{{ $user->email }}</td>
                                             <td> {{ $user->password }}</td>
-                                            @permission('delete.users')
-                                                <td>
-                                                    {!! Form::open(['url' => 'users/' . $user->id, 'class' => '', 'data-toggle' => 'tooltip', 'title' => 'Delete']) !!}
-                                                    {!! Form::hidden('_method', 'DELETE') !!}
-                                                    {!! Form::button(trans('usersmanagement.buttons.delete'), [
-                                                        'class' => 'btn btn-danger btn-sm',
-                                                        'type' => 'button',
-                                                        'style' => 'width: 100%;',
-                                                        'data-toggle' => 'modal',
-                                                        'data-target' => '#confirmDelete',
-                                                        'data-title' => 'Delete User',
-                                                        'data-message' => 'Are you sure you want to delete this user ?',
-                                                    ]) !!}
-                                                    {!! Form::close() !!}
-                                                </td>
-                                            @endpermission
-                                            <td>
-                                                <a class="btn btn-sm btn-success btn-block"
-                                                    href="{{ URL::to('users/' . $user->id) }}" data-toggle="tooltip"
-                                                    title="Show">
-                                                    {!! trans('usersmanagement.buttons.show') !!}
-                                                </a>
-                                            </td>
-                                            <td>
-                                                <a class="btn btn-sm btn-info btn-block"
-                                                    href="{{ URL::to('users/' . $user->id . '/edit') }}"
-                                                    data-toggle="tooltip" title="Edit">
-                                                    {!! trans('usersmanagement.buttons.edit') !!}
-                                                </a>
-                                            </td>
+                                            <td>{{ $user->remember_token }}</td>
+                                            <td>{{ $user->activated }}</td>
+                                            <td>{{ $user->token }}</td>
+                                            <td>{{ $user->position }}</td>
+                                            <td>{{ $user->department }}</td>
+                                            <td> {{ $user->leave_days }}</td>
+
+                                            <td>{{ $user->mobile }}</td>
+                                            <td>{{ $user->address }}</td>
+                                            <td>{{ $user->sick_days }}</td>
+                                            <td>{{ $user->gender }}</td>
+                                            <td>{{ $user->maternity }}</td>
+                                            <td>{{ $user->study_leave_days }}</td>
+                                            <td>{{ $user->compassionate }}</td>
+                                            <td>{{ $user->file }}</td>
+
                                         </tr>
                                     @endforeach
                                 </tbody>
