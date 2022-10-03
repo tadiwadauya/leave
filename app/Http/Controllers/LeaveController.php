@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Mail\LeaveApproval;
 use App\Mail\LeaveHasApproved;
+use App\Models\Department;
 use App\Models\Driver;
 use App\Models\Leave;
 use App\Models\User;
@@ -42,6 +43,7 @@ class LeaveController extends Controller
 
         $det = $user->roles()->where('name', 'User')->exists();
         $admin = $user->roles()->where('name', 'Admin')->exists();
+        $manager = $user->roles()->where('name', 'Manager')->exists();
         $hrmain = $user->roles()->where('slug', 'hrmaingate')->exists();
 
         if ($det) {
@@ -58,6 +60,14 @@ class LeaveController extends Controller
                     $join->on('u.paynumber', '=', 'l.paynumber');
                 })
                 ->select('u.paynumber', 'u.first_name', 'u.last_name', 'u.department', 'l.type_of_leave', 'l.id', 'l.days_taken', 'l.date_from', 'l.date_to', 'l.created_at', 'l.status')
+                ->get();
+        } elseif ($manager) {
+            $leaves = DB::table('leaves as l')
+                ->join('users as u', function ($join) {
+                    $join->on('u.paynumber', '=', 'l.paynumber');
+                })
+                ->select('u.paynumber', 'u.first_name', 'u.last_name', 'u.department', 'l.type_of_leave', 'l.id', 'l.days_taken', 'l.date_from', 'l.date_to', 'l.created_at', 'l.status')
+                ->where('l.department', '=', $department)
                 ->get();
         } elseif ($hrmain) {
             $leaves = DB::table('leaves as l')

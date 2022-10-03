@@ -14,19 +14,22 @@
 @endsection
 
 @section('template_linked_css')
-    <link rel="stylesheet" type="text/css" href="{{asset('css/dataTables.bootstrap4.min.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('css/dataTables.bootstrap4.min.css') }}">
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.5.6/css/buttons.dataTables.min.css">
 
     <style type="text/css" media="screen">
         .users-table {
             border: 0;
         }
+
         .users-table tr td:first-child {
             padding-left: 15px;
         }
+
         .users-table tr td:last-child {
             padding-right: 15px;
         }
+
         .users-table.table-responsive,
         .users-table.table-responsive table {
             margin-bottom: 0;
@@ -47,14 +50,16 @@
                                 Accrued Leave Balances
                             </span>
 
-                            <div class="btn-group pull-right btn-group-xs">
-                                <div class="btn pull-left btn-group-xs">
-                                  <a class="btn btn-primary btn-info btn-block" href="{{route('bulk.update')}}">
-                                        <i class="fa fa-fw fa-pied-piper" aria-hidden="true"></i>
-                                        Update Days
-                                    </a>
+                            @role('admin')
+                                <div class="btn-group pull-right btn-group-xs">
+                                    <div class="btn pull-left btn-group-xs">
+                                        <a class="btn btn-primary btn-info btn-block" href="{{ route('bulk.update') }}">
+                                            <i class="fa fa-fw fa-pied-piper" aria-hidden="true"></i>
+                                            Update Days
+                                        </a>
+                                    </div>
                                 </div>
-                            </div>
+                            @endrole
                         </div>
                     </div>
 
@@ -64,23 +69,23 @@
                             <table id="data-table" class="table table-striped table-sm data-table">
 
                                 <thead class="thead">
-                                <tr>
-                                    <th>Pay Number</th>
-                                    <th>Name </th>
-                                    <th>Department </th>
-                                    <th>Days Due</th>
-                                </tr>
+                                    <tr>
+                                        <th>Pay Number</th>
+                                        <th>Name </th>
+                                        <th>Department </th>
+                                        <th>Days Due</th>
+                                    </tr>
                                 </thead>
                                 <tbody id="users_table">
-                                @foreach($users as $user)
-                                    <tr>
-                                        <td>{{$user->paynumber}}</td>
-                                        <td>{{$user->first_name}} {{$user->last_name}}</td>
-                                        <td>{{$user->department}}</td>
-                                        <td>{{$user->leave_days}}</td>
+                                    @foreach ($users as $user)
+                                        <tr>
+                                            <td>{{ $user->paynumber }}</td>
+                                            <td>{{ $user->first_name }} {{ $user->last_name }}</td>
+                                            <td>{{ $user->department }}</td>
+                                            <td>{{ $user->leave_days }}</td>
 
-                                    </tr>
-                                @endforeach
+                                        </tr>
+                                    @endforeach
                                 </tbody>
                                 <tbody id="search_results"></tbody>
 
@@ -94,7 +99,6 @@
     </div>
 
     @include('modals.modal-delete')
-
 @endsection
 
 @section('footer_scripts')
@@ -126,7 +130,7 @@
     </script>
     @include('scripts.delete-modal-script')
     @include('scripts.save-modal-script')
-    @if(config('usersmanagement.tooltipsEnabled'))
+    @if (config('usersmanagement.tooltipsEnabled'))
         @include('scripts.tooltips')
     @endif
 
@@ -138,4 +142,3 @@
     <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.html5.min.js"></script>
     <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.print.min.js"></script>
 @endsection
-
