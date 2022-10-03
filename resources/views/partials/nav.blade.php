@@ -380,7 +380,7 @@
                     <li class="nav-item dropdown">
                         @php
                             $user = Auth::user();
-                            $notifications = \App\Models\Leave::where([['status', '2'], ['status', '=', '0'], ['department', $user->department]])->get();
+                            $notifications = \App\Models\Leave::where([['status', '0'], ['department', $user->department]])->get();
                             $count = count($notifications);
                         @endphp
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
