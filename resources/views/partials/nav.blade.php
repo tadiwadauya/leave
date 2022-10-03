@@ -379,9 +379,89 @@
 
                     <li class="nav-item dropdown">
                         @php
-                            $user = Auth::user();
-                            $notifications = \App\Models\Leave::where([['status', '0'], ['department', $user->department]])->get();
-                            $count = count($notifications);
+                            // $user = Auth::user();
+                            // $notifications = \App\Models\Leave::where([['status', '=', '1'], ['status', '=', '2'], ['department', $user->department]])->get();
+                            // $count = count($notifications);
+                            
+                            $dept = Auth::user()->department;
+                            $position = Auth::user()->position;
+                            $fdDepts = ['Accounts', 'I.T.', 'Internal Audit', 'Customs', 'SADC Accounts', 'Directors'];
+                            $techdDepts = ['Operations', 'Roadgrip', 'Tyres and Tarps', 'Human Resources', 'Engineering', 'Horses Workshop'];
+                            $opsHod = ['Beitbridge', 'Chirundu', 'Victoria Falls', 'Forbes'];
+                            $engHod = ['Trailers', 'Sales'];
+                            $accHod = ['Stores', 'Diesel'];
+                            $mdDepts = ['Directors'];
+                            
+                            if ($position == 'Finance Director') {
+                                $leaves = \App\Models\Leave::whereIn('leaves.department', $fdDepts)
+                                    ->where('status', null)
+                                    ->join('users', 'users.paynumber', '=', 'leaves.paynumber')
+                                    ->join('role_user', 'users.id', '=', 'role_user.user_id')
+                                    ->select('users.first_name', 'users.last_name', 'leaves.id', 'leaves.paynumber', 'leaves.type_of_leave', 'leaves.days_taken', 'leaves.date_from', 'leaves.date_to', 'leaves.created_at', 'leaves.status')
+                                    ->where('role_user.role_id', '=', '4')
+                                    ->get();
+                            } elseif ($position == 'Technical Director') {
+                                $leaves = \App\Models\Leave::whereIn('leaves.department', $techdDepts)
+                                    ->where('status', null)
+                                    ->join('users', 'users.paynumber', '=', 'leaves.paynumber')
+                                    ->join('role_user', 'users.id', '=', 'role_user.user_id')
+                                    ->select('users.first_name', 'users.last_name', 'leaves.id', 'leaves.paynumber', 'leaves.type_of_leave', 'leaves.days_taken', 'leaves.date_from', 'leaves.date_to', 'leaves.created_at', 'leaves.status')
+                                    ->where('role_user.role_id', '=', '4')
+                                    ->get();
+                            } elseif ($position == 'Operations Manager') {
+                                $leaves = \App\Models\Leave::whereIn('leaves.department', $opsHod)
+                                    ->where('status', null)
+                                    ->join('users', 'users.paynumber', '=', 'leaves.paynumber')
+                                    ->join('role_user', 'users.id', '=', 'role_user.user_id')
+                                    ->select('users.first_name', 'users.last_name', 'leaves.id', 'leaves.paynumber', 'leaves.type_of_leave', 'leaves.days_taken', 'leaves.date_from', 'leaves.date_to', 'leaves.created_at', 'leaves.status')
+                                    ->where('role_user.role_id', '=', '4')
+                                    ->orWhere('leaves.department', $dept)
+                                    ->where('role_user.role_id', '!=', '4')
+                                    ->where('status', null)
+                                    ->get();
+                            } elseif ($position == 'Engineering Manager') {
+                                $leaves = \App\Models\Leave::whereIn('leaves.department', $engHod)
+                                    ->where('status', null)
+                                    ->join('users', 'users.paynumber', '=', 'leaves.paynumber')
+                                    ->join('role_user', 'users.id', '=', 'role_user.user_id')
+                                    ->select('users.first_name', 'users.last_name', 'leaves.id', 'leaves.paynumber', 'leaves.type_of_leave', 'leaves.days_taken', 'leaves.date_from', 'leaves.date_to', 'leaves.created_at', 'leaves.status')
+                                    ->where('role_user.role_id', '=', '4')
+                                    ->orWhere('leaves.department', $dept)
+                                    ->where('role_user.role_id', '!=', '4')
+                                    ->where('status', null)
+                                    ->get();
+                            } elseif ($position == 'Finance Manager') {
+                                $leaves = \App\Models\Leave::whereIn('leaves.department', $accHod)
+                                    ->where('status', null)
+                                    ->join('users', 'users.paynumber', '=', 'leaves.paynumber')
+                                    ->join('role_user', 'users.id', '=', 'role_user.user_id')
+                                    ->select('users.first_name', 'users.last_name', 'leaves.id', 'leaves.paynumber', 'leaves.type_of_leave', 'leaves.days_taken', 'leaves.date_from', 'leaves.date_to', 'leaves.created_at', 'leaves.status')
+                                    ->where('role_user.role_id', '=', '4')
+                                    ->orWhere('leaves.department', $dept)
+                                    ->where('role_user.role_id', '!=', '4')
+                                    ->where('status', null)
+                                    ->get();
+                            } elseif ($position == 'Managing Director') {
+                                $leaves = \App\Models\Leave::whereIn('leaves.department', $mdDepts)
+                                    ->where('status', null)
+                                    ->join('users', 'users.paynumber', '=', 'leaves.paynumber')
+                                    ->join('role_user', 'users.id', '=', 'role_user.user_id')
+                                    ->select('users.first_name', 'users.last_name', 'leaves.id', 'leaves.paynumber', 'leaves.type_of_leave', 'leaves.days_taken', 'leaves.date_from', 'leaves.date_to', 'leaves.created_at', 'leaves.status')
+                                    ->where('role_user.role_id', '=', '5')
+                                    ->get();
+                            } else {
+                                $department = AUth::user()->department;
+                                $leaves = \App\Models\Leave::where('leaves.department', $department)
+                                    ->where('status', null)
+                                    ->join('users', 'users.paynumber', '=', 'leaves.paynumber')
+                                    ->join('role_user', 'users.id', '=', 'role_user.user_id')
+                                    ->select('users.first_name', 'users.last_name', 'leaves.id', 'leaves.applier_name', 'leaves.paynumber', 'leaves.type_of_leave', 'leaves.days_taken', 'leaves.date_from', 'leaves.date_to', 'leaves.created_at', 'leaves.status')
+                                    ->where('role_user.role_id', '!=', '4')
+                                    ->where('role_user.role_id', '!=', '5')
+                                    ->get();
+                            }
+                            
+                            $count = count($leaves);
                         @endphp
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -392,16 +472,16 @@
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                             @if ($count > 0)
-                                @foreach ($notifications as $n)
-                                    <a class="dropdown-item" href="{{ url('/leaves') }}">
+                                @foreach ($leaves as $l)
+                                    <a class="dropdown-item" href="{{ url('/manage-leaves') }}">
                                         <h6>
-                                            {{ $n->type_of_leave }} - {{ $n->applier_name }}
+                                            {{ $l->type_of_leave }} - {{ $l->applier_name }}
                                         </h6>
                                     </a>
                                     <div class="dropdown-divider"></div>
                                 @endforeach
                             @else
-                                <a href="#" class="dropdown-item">
+                                <a class="dropdown-item" href="#">
                                     No Notifications
                                 </a>
                             @endif
