@@ -473,7 +473,7 @@
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                             @if ($count > 0)
                                 @foreach ($leaves as $l)
-                                    <a class="dropdown-item" href="{{ url('/manage-leaves') }}">
+                                    <a class="dropdown-item" href="{{ url('/manage-leave') }}">
                                         <h6>
                                             {{ $l->type_of_leave }} - {{ $l->applier_name }}
                                         </h6>
