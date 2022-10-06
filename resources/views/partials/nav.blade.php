@@ -25,6 +25,13 @@
 
                             <div class="dropdown-divider"></div>
 
+                            <a class="dropdown-item {{ Request::is('users/beira/list') ? 'active' : null }}"
+                                href="{{ url('/users/beira/list') }}">
+                                Beira Users Administration
+                            </a>
+
+                            <div class="dropdown-divider"></div>
+
                             <a class="dropdown-item {{ Request::is('drivers', 'drivers/*') ? 'active' : null }}"
                                 href="{{ url('/drivers') }}">
                                 Drivers Administration

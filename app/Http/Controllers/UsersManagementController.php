@@ -31,10 +31,18 @@ class UsersManagementController extends Controller
      */
     public function index()
     {
-        $users = User::all();
+        $users = User::where('department', '!=', 'Beira')->get();
         $roles = Role::all();
 
         return View('usersmanagement.show-users', compact('users', 'roles'));
+    }
+
+    public function beiraIndex()
+    {
+        $users = User::where('department', 'Beira')->get();
+        $roles = Role::all();
+
+        return View('beira.beira-users', compact('users', 'roles'));
     }
 
     /**
@@ -64,7 +72,8 @@ class UsersManagementController extends Controller
      */
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(),
+        $validator = Validator::make(
+            $request->all(),
             [
                 'name'                  => 'required|max:255|unique:users',
                 'paynumber'             => 'required|max:255|unique:users',
@@ -183,7 +192,8 @@ class UsersManagementController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id) {
+    public function update(Request $request, $id)
+    {
         $currentUser = Auth::user();
         $user = User::find($id);
         $emailCheck = ($request->input('email') != '') && ($request->input('email') != $user->email);
@@ -300,9 +310,9 @@ class UsersManagementController extends Controller
             ], Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
-        $results = User::where('id', 'like', $searchTerm.'%')
-            ->orWhere('name', 'like', $searchTerm.'%')
-            ->orWhere('email', 'like', $searchTerm.'%')->get();
+        $results = User::where('id', 'like', $searchTerm . '%')
+            ->orWhere('name', 'like', $searchTerm . '%')
+            ->orWhere('email', 'like', $searchTerm . '%')->get();
 
         // Attach roles to results
         foreach ($results as $result) {

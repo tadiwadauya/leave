@@ -984,7 +984,7 @@ class LeaveController extends Controller
                 $join->on('u.paynumber', '=', 'l.paynumber');
             })
 
-            ->select('u.paynumber', 'u.first_name', 'u.last_name', 'u.leave_days', DB::raw('sum(l.days_taken) as totalDaysTaken'))
+            ->select('u.paynumber', 'u.first_name', 'u.last_name', 'u.department', 'u.leave_days', DB::raw('sum(l.days_taken) as totalDaysTaken'))
             ->where('l.paynumber', $leave->paynumber)
             ->where('l.type_of_leave', '=', 'Annual')
             ->groupBy('u.paynumber', 'u.first_name', 'u.last_name', 'u.leave_days')
@@ -995,7 +995,7 @@ class LeaveController extends Controller
                 $join->on('u.paynumber', '=', 'l.paynumber');
             })
 
-            ->select('u.paynumber', 'u.first_name', 'u.last_name', 'u.leave_days', DB::raw('sum(l.days_taken) as totalDaysTaken'))
+            ->select('u.paynumber', 'u.first_name', 'u.last_name', 'u.department', 'u.leave_days', DB::raw('sum(l.days_taken) as totalDaysTaken'))
             ->where('l.paynumber', $leave->paynumber)
             ->where('l.type_of_leave', '=', 'Sick')
             ->whereYear('l.created_at', '=', Carbon::parse($date)->format('Y'))
