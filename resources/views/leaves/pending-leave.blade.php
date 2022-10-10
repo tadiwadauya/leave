@@ -79,6 +79,7 @@
                                         <th>Status</th>
                                         <th>{!! trans('usersmanagement.users-table.actions') !!}</th>
                                         <th class="no-search no-sort"></th>
+                                        <th class="no-search no-sort"></th>
                                     </tr>
                                 </thead>
                                 <tbody id="users_table">
@@ -130,6 +131,17 @@
                                                         class="hidden-xs hidden-sm hidden-md"> Request</span>
                                                 </a>
                                             </td>
+                                            @role('admin')
+                                                <td>
+                                                    <a class="btn btn-sm btn-warning btn-block"
+                                                        href="{{ URL::to('/leaves/resend/' . $leave->id) }}"
+                                                        data-toggle="tooltip" title="Resend Application">
+                                                        <i class="fa fa-times fa-fw" aria-hidden="true"></i> <span
+                                                            class="hidden-xs hidden-sm">Resend</span><span
+                                                            class="hidden-xs hidden-sm hidden-md"> Request</span>
+                                                    </a>
+                                                </td>
+                                            @endrole
                                         </tr>
                                     @endforeach
                                 </tbody>

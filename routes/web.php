@@ -42,11 +42,11 @@ Route::group(['middleware' => ['web', 'activity', 'checkblocked']], function () 
     // Route to for user to reactivate their user deleted account.
     Route::get('/re-activate/{token}', ['as' => 'user.reactivate', 'uses' => 'RestoreUserController@userReActivate']);
 
-    Route::get('/getTitles/{department}','JobTitleController@getTitles')->name('jobtitles.fetch');
+    Route::get('/getTitles/{department}', 'JobTitleController@getTitles')->name('jobtitles.fetch');
 
-    Route::get('/leave-pdf/{id}','LeaveController@generatePdf')->name('generate.pdf');
+    Route::get('/leave-pdf/{id}', 'LeaveController@generatePdf')->name('generate.pdf');
 
-    Route::get('/driver-leave-pdf/{id}','DriverLeaveController@generatePdf')->name('generate.driverpdf');
+    Route::get('/driver-leave-pdf/{id}', 'DriverLeaveController@generatePdf')->name('generate.driverpdf');
 });
 
 // Registered and Activated User Routes
@@ -76,7 +76,8 @@ Route::group(['middleware' => ['auth', 'activated', 'currentUser', 'activity', '
     // User Profile and Account Routes
     Route::resource(
         'profile',
-        'ProfilesController', [
+        'ProfilesController',
+        [
             'only' => [
                 'show',
                 'edit',
@@ -158,6 +159,10 @@ Route::group(['middleware' => ['auth', 'activated', 'activity', 'checkblocked']]
 
     Route::get('manage-leave', 'LeaveController@manage')->name('manage-leave');
 
+    Route::get('pending-leave', 'LeaveController@pending')->name('pending-leave');
+
+    Route::get('/leaves/resend/{id}', 'LeaveController@resendEmail')->name('resend-email');
+
     Route::get('leave-records', 'LeaveController@getRecords')->name('leave-records');
 
     Route::post('leave-records', 'LeaveController@getLeaveRecords')->name('records.leave');
@@ -176,9 +181,9 @@ Route::group(['middleware' => ['auth', 'activated', 'activity', 'checkblocked']]
 
     Route::get('study-leave-balances', 'LeaveController@getStudyLeaveBalances')->name('leave.balances.study');
 
-    Route::get('leavesick/{id}','LeaveController@showMysicknote');
-    
-    Route::get('/leaves/download/{file}','LeaveController@download');
+    Route::get('leavesick/{id}', 'LeaveController@showMysicknote');
+
+    Route::get('/leaves/download/{file}', 'LeaveController@download');
 
     Route::get('/leaves/approve/{id}', ['as' => 'approve.leave', 'uses' => 'LeaveController@activate']);
     Route::get('/leaves/reject/{id}', ['as' => 'reject.leave', 'uses' => 'LeaveController@reject']);
@@ -196,21 +201,21 @@ Route::get('/blade-response', 'WelcomeController@requestResponse');
 Route::get('testmail', function () {
     $leave = \App\Models\Leave::find(113);
 
-    $fmuser = User::where('paynumber','=',237)->first();
+    $fmuser = User::where('paynumber', '=', 237)->first();
 
-    $applicant = User::where('paynumber','=','5A')->first();
+    $applicant = User::where('paynumber', '=', '5A')->first();
 
     $details = [
         'greeting' => 'Good day, ' . $fmuser->first_name,
         'body' => $applicant->first_name . ' ' . $applicant->last_name . ' has submitted a leave request which has not been actioned. Please, attend to it. The leave request has the following information: ',
-        'body1'=> $leave->type_of_leave,
+        'body1' => $leave->type_of_leave,
         'body2' => $leave->days_taken,
         'body3' => $leave->date_from,
         'body4' => $leave->date_to,
         'body5' => 'You can approve this request by clicking Approve : ',
-        'approveURL' => 'http://192.168.1.242:8080/whelsonleave/leaves/emailapprove/'.$fmuser->paynumber.'/'.$fmuser->first_name.'/'.$fmuser->last_name.'/'.$leave->id,
-        'rejectURL' => 'http://192.168.1.242:8080/whelsonleave/leaves/emailreject/'.$fmuser->paynumber.'/'.$fmuser->first_name.'/'.$fmuser->last_name.'/'.$leave->id,
-        'body6'=> 'You can reject this request straightaway:',
+        'approveURL' => 'http://192.168.1.242:8080/whelsonleave/leaves/emailapprove/' . $fmuser->paynumber . '/' . $fmuser->first_name . '/' . $fmuser->last_name . '/' . $leave->id,
+        'rejectURL' => 'http://192.168.1.242:8080/whelsonleave/leaves/emailreject/' . $fmuser->paynumber . '/' . $fmuser->first_name . '/' . $fmuser->last_name . '/' . $leave->id,
+        'body6' => 'You can reject this request straightaway:',
         'id' => $leave->id
     ];
 
@@ -249,7 +254,7 @@ Route::group(['middleware' => ['auth', 'activated', 'activity', 'checkblocked']]
 
     Route::get('driver-bulk-update', 'DriverLeaveController@bulkUpdater')->name('bulk.updatedrivers');
 
-    Route::get('/getPrevLeaves/{paynumber}','DriverLeaveController@fetchPrevLeaves')->name('prevleaves.fetch');
+    Route::get('/getPrevLeaves/{paynumber}', 'DriverLeaveController@fetchPrevLeaves')->name('prevleaves.fetch');
 });
 
 
@@ -272,7 +277,6 @@ Route::group(['middleware' => ['auth', 'activated', 'activity', 'checkblocked']]
     ]);
 
     Route::get('departmental-users', 'DepartmentController@getDepartmentalUsers')->name('departmental-users');
-
 });
 
 Route::group(['middleware' => ['auth', 'activated', 'activity', 'checkblocked']], function () {
@@ -286,7 +290,6 @@ Route::group(['middleware' => ['auth', 'activated', 'activity', 'checkblocked']]
             'deleted',
         ],
     ]);
-
 });
 
 Route::group(['middleware' => ['auth', 'activated', 'activity', 'checkblocked']], function () {
@@ -306,7 +309,6 @@ Route::group(['middleware' => ['auth', 'activated', 'activity', 'checkblocked']]
             'deleted',
         ],
     ]);
-
 });
 
 Route::redirect('/php', '/phpinfo', 301);
