@@ -31,7 +31,7 @@ class UsersManagementController extends Controller
      */
     public function index()
     {
-        $users = User::where('department', '!=', 'Beira')->get();
+        $users = User::where('department', '!=', 'Beira')->where('department', '!=', 'Zambia')->get();
         $roles = Role::all();
 
         return View('usersmanagement.show-users', compact('users', 'roles'));
@@ -43,6 +43,14 @@ class UsersManagementController extends Controller
         $roles = Role::all();
 
         return View('beira.beira-users', compact('users', 'roles'));
+    }
+
+    public function zambiaIndex()
+    {
+        $users = User::where('department', 'Zambia')->get();
+        $roles = Role::all();
+
+        return View('zambia.zambia-users', compact('users', 'roles'));
     }
 
     /**

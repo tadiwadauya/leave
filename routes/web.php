@@ -127,6 +127,7 @@ Route::group(['middleware' => ['auth', 'activated', 'role:admin', 'activity', 't
     ]);
 
     Route::get('/users/beira/list', 'UsersManagementController@beiraIndex');
+    Route::get('/users/zambia/list', 'UsersManagementController@zambiaIndex');
 
     Route::post('search-users', 'UsersManagementController@search')->name('search-users');
 

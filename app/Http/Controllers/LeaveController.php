@@ -495,7 +495,6 @@ class LeaveController extends Controller
                             'body6' => 'You can reject this request straightaway:',
                             'id' => $leave->id
                         ];
-
                         Mail::to($authorizer->email)->send(new LeaveApproval($details));
                     }
                 } catch (\Exception $exception) {
@@ -1118,8 +1117,10 @@ class LeaveController extends Controller
     public function bulkUpdater()
     {
         // $users = User::all();
-        $users = User::where('department', '!=', 'Beira')->get();
+
+        $users = User::where('department', '!=', 'Beira')->where('department', '!=', 'Zambia')->get();
         $beira_users = User::where('department', '=', 'Beira')->get();
+        $zambia_users = User::where('department', '=', 'Beira')->get();
 
         $lastValue = 66;
 
@@ -1181,6 +1182,37 @@ class LeaveController extends Controller
                 }
             }
         }
+
+        foreach ($zambia_users as $user) {
+
+            if (($user->leave_days + 2) <= $lastValue) {
+                DB::table("users")
+                    ->where('id', '=', $user->id)
+                    ->update([
+                        'updated_at' => now(),
+                        'leave_days' => $user->leave_days + 2
+                    ]);
+            } elseif ($user->leave_days >= $lastValue) {
+                DB::table("users")
+                    ->where('id', '=', $user->id)
+                    ->update([
+                        'updated_at' => now(),
+                        'leave_days' => $lastValue
+                    ]);
+            } else {
+                $user->leave_days = $user->leave_days + 2;
+
+                if ($user->leave_days > $lastValue) {
+                    DB::table("users")
+                        ->where('id', '=', $user->id)
+                        ->update([
+                            'updated_at' => now(),
+                            'leave_days' => $lastValue
+                        ]);
+                }
+            }
+        }
+
         return redirect()->back()->with('success', 'Leave days updated successfully');
     }
 

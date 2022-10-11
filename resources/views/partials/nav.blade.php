@@ -29,6 +29,10 @@
                                 href="{{ url('/users/beira/list') }}">
                                 Beira Users Administration
                             </a>
+                            <a class="dropdown-item {{ Request::is('users/zambia/list') ? 'active' : null }}"
+                                href="{{ url('/users/zambia/list') }}">
+                                Zambia Users Administration
+                            </a>
 
                             <div class="dropdown-divider"></div>
 
